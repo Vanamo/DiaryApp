@@ -1,14 +1,10 @@
-import { auth, database } from '../config/firebase'
+import firebase from 'firebase'
 
 const register = async (data) => {
-    const { email, password, username } = data
+  const { email, password } = data
 
-    try {
-        const response = await auth.createUserWithEmailAndPassword(email, password)
-        return response.data
-    } catch (error) {
-        console.log(error.toString())
-    }
+  const response = await firebase.auth().createUserWithEmailAndPassword(email, password)
+  return response.data
 }
 
 export default { register }

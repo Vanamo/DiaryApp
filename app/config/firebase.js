@@ -11,8 +11,4 @@ const config = {
     messagingSenderId: c.FIREBASE_MESSAGING_SENDER_ID
 };
 
-firebase.initializeApp(config);
-
-export const database = firebase.database()
-export const auth = firebase.auth()
-export const storage = firebase.storage()
+firebase.initializeApp(config)

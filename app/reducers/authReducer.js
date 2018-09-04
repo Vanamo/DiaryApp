@@ -5,7 +5,7 @@ const initialState = { isLoggedIn: false, user: null }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-    case 'LOG_IN':
+    case 'SIGN_UP':
         const user = action.data
         AsyncStorage.multiSet([
             ['user', JSON.stringify(user)]
@@ -21,7 +21,7 @@ export const register = (data) => {
         try {
             const user = authServices.register(data)
             dispatch({
-                type: 'LOG_IN',
+                type: 'SIGN_UP',
                 data: user
             })
         } catch (exception) {
