@@ -2,29 +2,47 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import { register } from '../reducers/authReducer'
+import { newErrorNotification } from '../reducers/notificationReducer'
+import Notification from './Notification'
 
 class SignUpScreen extends React.Component {
 
   state = {
+    username: '',
     email: '',
     password: '',
-    errorMessage: null
+    cPassword: ''
   }
 
-  handleSignUp = async () => {
-    const data = { email: this.state.email, password: this.state.password }
-    await this.props.register(data)
+  handleSignUp = () => {
+    const data = {
+      email: this.state.email,
+      password: this.state.password,
+      username: this.state.username
+    }
+    this.props.register(data, this.onSuccess, this.onError)
+  }
+
+  onSuccess = () => {
     this.props.navigation.navigate('Home')
+  }
+
+  onError = (error) => {
+    this.props.newErrorNotification(error.message, 5)
   }
 
   render() {
     return (
       <View style={styles.container}>
         <Text>Luo käyttäjätunnus</Text>
-        {this.state.errorMessage &&
-          <Text style={{ color: 'red' }}>
-            {this.state.errorMessage}
-          </Text>}
+        <Notification />
+        <TextInput
+          placeholder='Käyttäjätunnus'
+          autoCapitalize='none'
+          style={styles.textInput}
+          onChangeText={username => this.setState({ username })}
+          value={this.state.username}
+        />
         <TextInput
           placeholder='Sähköpostiosoite'
           autoCapitalize='none'
@@ -39,6 +57,14 @@ class SignUpScreen extends React.Component {
           style={styles.textInput}
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
+        />
+        <TextInput
+          secureTextEntry
+          placeholder='Salasana uudestaan'
+          autoCapitalize='none'
+          style={styles.textInput}
+          onChangeText={cPassword => this.setState({ cPassword })}
+          value={this.state.cPassword}
         />
         <Button
           title='Luo käyttäjätunnus'
@@ -70,5 +96,5 @@ const styles = StyleSheet.create({
 
 export default connect(
   null,
-  { register }
+  { register, newErrorNotification }
 )(SignUpScreen)

@@ -1,27 +1,35 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
+import { connect } from 'react-redux'
+import { login } from '../reducers/authReducer'
+import Notification from './Notification'
+import { newErrorNotification } from '../reducers/notificationReducer'
 
 class LoginScreen extends React.Component {
 
   state = {
     email: '',
-    password: '',
-    errorMessage: null
+    password: ''
   }
 
   handleLogin = () => {
-    // TODO: Firebase stuff...
-    console.log('handleLogin')
+    const data = { email: this.state.email, password: this.state.password }
+    this.props.login(data, this.onSuccess, this.onError)
+  }
+
+  onSuccess = () => {
+    this.props.navigation.navigate('Home')
+  }
+
+  onError = () => {
+    this.props.newErrorNotification('Väärä sähköpostiosoite tai salasana', 5)
   }
 
   render() {
     return (
       <View style={styles.container}>
         <Text>Kirjaudu sisään</Text>
-        {this.state.errorMessage &&
-          <Text style={{ color: 'red' }}>
-            {this.state.errorMessage}
-          </Text>}
+        <Notification/>
         <TextInput
           style={styles.textInput}
           autoCapitalize='none'
@@ -65,4 +73,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default LoginScreen
+export default connect(
+  null,
+  { login, newErrorNotification }
+)(LoginScreen)
