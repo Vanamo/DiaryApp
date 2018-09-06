@@ -8,11 +8,10 @@ const register = (data, callback) => {
 }
 
 const createUser = (user, callback) => {
-  console.log('u', user)
-  firebase.database().ref('users').push({
-    username: user.username,
-    uid: user.uid
-  }).then(() => callback(true, user, null))
+  const userRef = firebase.database().ref().child('users')
+
+  userRef.child(user.uid).update({ ...user })
+    .then(() => callback(true, user, null))
     .catch((error) => callback(false, null, { message: error }))
 }
 

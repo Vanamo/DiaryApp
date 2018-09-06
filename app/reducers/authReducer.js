@@ -24,7 +24,6 @@ const reducer = (state = initialState, action) => {
 export const register = (userData, successCB, errorCB) => {
   return (dispatch) => {
     authServices.register(userData, function (success, data, error) {
-      console.log('cb1', success, data, error)
       if (success) {
         dispatch({
           type: 'LOGIN',
@@ -41,7 +40,6 @@ export const register = (userData, successCB, errorCB) => {
 export const login = (userData, successCB, errorCB) => {
   return (dispatch) => {
     authServices.login(userData, function (success, data, error) {
-      console.log('cb', success, data, error)
       if (success) {
         if (userData.exists) {
           dispatch({
@@ -50,7 +48,9 @@ export const login = (userData, successCB, errorCB) => {
           })
         }
         successCB()
-      } else if (error) errorCB()
+      } else if (error) {
+        errorCB()
+      }
     })
   }
 }

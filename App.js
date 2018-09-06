@@ -44,6 +44,7 @@ firebase.initializeApp(config)
 
 export default class App extends React.Component {
   render() {
+    console.ignoredYellowBox = ['Setting a timer']
     return (
       <Provider store={store}>
         <RootStack/>

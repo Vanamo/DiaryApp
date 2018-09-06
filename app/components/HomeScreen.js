@@ -25,8 +25,8 @@ class HomeScreen extends React.Component {
     this.props.navigation.navigate('AuthLoading')
   }
 
-  onError = () => {
-    this.props.newErrorNotification('Uloskirjautuminen ei onnistunut', 5)
+  onError = (error) => {
+    this.props.newErrorNotification(error.message, 5)
   }
 
   render() {
