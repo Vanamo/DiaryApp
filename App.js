@@ -15,7 +15,12 @@ const AppStack = createStackNavigator({
 })
 
 const AuthStack = createStackNavigator({
-  SignUp: SignUpScreen,
+  SignUp: {
+    screen: SignUpScreen,
+    navigationOptions: () => ({
+      header: null
+    })
+  },
   Login: LoginScreen
 })
 
@@ -47,7 +52,7 @@ export default class App extends React.Component {
     console.ignoredYellowBox = ['Setting a timer']
     return (
       <Provider store={store}>
-        <RootStack/>
+        <RootStack />
       </Provider>
     )
   }

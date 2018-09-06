@@ -4,6 +4,8 @@ import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import { register } from '../reducers/authReducer'
 import { newErrorNotification } from '../reducers/notificationReducer'
 import Notification from './Notification'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Button } from 'react-native-elements'
 
 class SignUpScreen extends React.Component {
 
@@ -33,48 +35,55 @@ class SignUpScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Luo käyttäjätunnus</Text>
-        <Notification />
-        <TextInput
-          placeholder='Käyttäjätunnus'
-          autoCapitalize='none'
-          style={styles.textInput}
-          onChangeText={username => this.setState({ username })}
-          value={this.state.username}
-        />
-        <TextInput
-          placeholder='Sähköpostiosoite'
-          autoCapitalize='none'
-          style={styles.textInput}
-          onChangeText={email => this.setState({ email })}
-          value={this.state.email}
-        />
-        <TextInput
-          secureTextEntry
-          placeholder='Salasana'
-          autoCapitalize='none'
-          style={styles.textInput}
-          onChangeText={password => this.setState({ password })}
-          value={this.state.password}
-        />
-        <TextInput
-          secureTextEntry
-          placeholder='Salasana uudestaan'
-          autoCapitalize='none'
-          style={styles.textInput}
-          onChangeText={cPassword => this.setState({ cPassword })}
-          value={this.state.cPassword}
-        />
-        <Button
-          title='Luo käyttäjätunnus'
-          onPress={this.handleSignUp}
-        />
-        <Button
-          title='Onko sinulla jo käyttäjätunnus? Kirjaudu sisään tästä'
-          onPress={() => this.props.navigation.navigate('Login')}
-        />
-      </View>
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps='always'
+      >
+        <View style={styles.container}>
+          <Button
+            title='testi'
+          />
+          <Text>Luo käyttäjätunnus</Text>
+          <Notification />
+          <TextInput
+            placeholder='Käyttäjätunnus'
+            autoCapitalize='none'
+            style={styles.textInput}
+            onChangeText={username => this.setState({ username })}
+            value={this.state.username}
+          />
+          <TextInput
+            placeholder='Sähköpostiosoite'
+            autoCapitalize='none'
+            style={styles.textInput}
+            onChangeText={email => this.setState({ email })}
+            value={this.state.email}
+          />
+          <TextInput
+            secureTextEntry
+            placeholder='Salasana'
+            autoCapitalize='none'
+            style={styles.textInput}
+            onChangeText={password => this.setState({ password })}
+            value={this.state.password}
+          />
+          <TextInput
+            secureTextEntry
+            placeholder='Salasana uudestaan'
+            autoCapitalize='none'
+            style={styles.textInput}
+            onChangeText={cPassword => this.setState({ cPassword })}
+            value={this.state.cPassword}
+          />
+          <Button
+            title='Luo käyttäjätunnus'
+            onPress={this.handleSignUp}
+          />
+          <Button
+            title='Onko sinulla jo käyttäjätunnus? Kirjaudu sisään tästä'
+            onPress={() => this.props.navigation.navigate('Login')}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     )
   }
 }
