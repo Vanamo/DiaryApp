@@ -22,7 +22,12 @@ const AuthStack = createStackNavigator({
       header: null
     })
   },
-  Login: LoginScreen
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: () => ({
+      header: null
+    })
+  }
 })
 
 const RootStack = createSwitchNavigator(

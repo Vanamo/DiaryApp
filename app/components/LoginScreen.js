@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 import { login } from '../reducers/authReducer'
 import Notification from './Notification'
 import { newErrorNotification } from '../reducers/notificationReducer'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Tile } from 'react-native-elements'
+import CustomButton from '../utils/CustomButton'
 
 class LoginScreen extends React.Component {
 
@@ -27,49 +30,68 @@ class LoginScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Kirjaudu sisään</Text>
-        <Notification/>
-        <TextInput
-          style={styles.textInput}
-          autoCapitalize='none'
-          placeholder='Sähköpostiosoite'
-          onChangeText={email => this.setState({ email })}
-          value={this.state.email}
-        />
-        <TextInput
-          secureTextEntry
-          style={styles.textInput}
-          autoCapitalize='none'
-          placeholder='Salasana'
-          onChangeText={password => this.setState({ password })}
-          value={this.state.password}
-        />
-        <Button
-          title='Kirjaudu sisään'
-          onPress={this.handleLogin}
-        />
-        <Button
-          title='Jos sinulla ei ole vielä käyttäjätunnusta, luo se tästä'
-          onPress={() => this.props.navigation.navigate('SignUp')}
-        />
-      </View>
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps='always'
+        enableOnAndroid={true}
+      >
+        <View style={styles.formContainer}>
+          <Tile
+            imageSrc={require('../../images/writing-1209121_1920.jpg')}
+            containerStyle={{ height: 200 }}
+          />
+          <CustomButton
+            onPress={() => this.props.navigation.navigate('SignUp')}
+            title1='Jos sinulla ei vielä ole käyttäjätunnusta,'
+            title2='luo se tästä '
+            width='wide'
+          />
+          <Text style={styles.title}>Kirjaudu sisään</Text>
+          <Notification />
+          <TextInput
+            style={styles.textInput}
+            autoCapitalize='none'
+            placeholder='Sähköpostiosoite'
+            onChangeText={email => this.setState({ email })}
+            value={this.state.email}
+          />
+          <TextInput
+            secureTextEntry
+            style={styles.textInput}
+            autoCapitalize='none'
+            placeholder='Salasana'
+            onChangeText={password => this.setState({ password })}
+            value={this.state.password}
+          />
+          <View style={{ marginTop: 15 }} />
+          <CustomButton
+            title1='Kirjaudu sisään'
+            onPress={this.handleLogin}
+          />
+        </View>
+      </KeyboardAwareScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  formContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'flex-start'
+  },
+  title: {
+    marginLeft: 13,
+    marginTop: 50,
+    fontSize: 20,
+    fontFamily: 'caveat-regular'
   },
   textInput: {
     height: 40,
     width: '90%',
     borderColor: 'gray',
     borderWidth: 1,
-    marginTop: 8
+    marginTop: 8,
+    marginLeft: 13
   }
 })
 
