@@ -3,6 +3,7 @@ import firebase from 'firebase'
 import * as c from './app/config/constants'
 import { StyleSheet, Text, View } from 'react-native'
 import { Provider } from 'react-redux'
+import { Font } from 'expo'
 import store from './app/store'
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
 import HomeScreen from './app/components/HomeScreen'
@@ -48,13 +49,29 @@ const config = {
 firebase.initializeApp(config)
 
 export default class App extends React.Component {
+
+  state = {
+    fontLoaded: false
+  }
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      'caveat-regular': require('./assets/fonts/Caveat-Regular.ttf')
+    })
+    this.setState({ fontLoaded: true })
+  }
+
   render() {
     console.ignoredYellowBox = ['Setting a timer']
-    return (
-      <Provider store={store}>
-        <RootStack />
-      </Provider>
-    )
+    if (this.state.fontLoaded) {
+      return (
+        <Provider store={store}>
+          <RootStack />
+        </Provider>
+      )
+    } else {
+      return null
+    }
   }
 }
 

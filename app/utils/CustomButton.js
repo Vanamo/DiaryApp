@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+    fontFamily: 'caveat-regular',
+    fontSize: 17
   },
   textAlignment: {
     alignItems: 'center',
