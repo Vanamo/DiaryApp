@@ -5,7 +5,8 @@ import { register } from '../reducers/authReducer'
 import { newErrorNotification } from '../reducers/notificationReducer'
 import Notification from './Notification'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { Button, Tile } from 'react-native-elements'
+import { Tile } from 'react-native-elements'
+import CustomButton from '../utils/CustomButton'
 
 class SignUpScreen extends React.Component {
 
@@ -44,10 +45,11 @@ class SignUpScreen extends React.Component {
             imageSrc={require('../../images/writing-1209121_1920.jpg')}
             containerStyle={{ height: 200 }}
           />
-          <Button
-            title='Onko sinulla jo käyttäjätunnus? Kirjaudu sisään tästä'
+          <CustomButton
             onPress={() => this.props.navigation.navigate('Login')}
-            borderRadius={4}
+            title1='Onko sinulla jo käyttäjätunnus?'
+            title2='Kirjaudu sisään tästä'
+            width='wide'
           />
           <Text style={styles.title}>Luo käyttäjätunnus</Text>
           <Notification />
@@ -76,11 +78,10 @@ class SignUpScreen extends React.Component {
             value={this.state.password}
             underlineColorAndroid='transparent'
           />
-          <Button
-            title='Luo käyttäjätunnus'
+          <View style={{ marginTop: 15 }}/>
+          <CustomButton
+            title1='Luo käyttäjätunnus'
             onPress={this.handleSignUp}
-            borderRadius={4}
-            buttonStyle={{ marginTop: 15 }}
           />
         </View>
       </KeyboardAwareScrollView>
@@ -96,7 +97,9 @@ const styles = StyleSheet.create({
   },
   title: {
     marginLeft: 13,
-    marginTop: 20
+    marginTop: 50,
+    fontSize: 20,
+    fontFamily: 'Roboto'
   },
   textInput: {
     height: 40,
