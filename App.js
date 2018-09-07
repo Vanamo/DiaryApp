@@ -1,8 +1,8 @@
 import React from 'react'
 import firebase from 'firebase'
 import * as c from './app/config/constants'
-import { StyleSheet, Text, View } from 'react-native'
 import { Provider } from 'react-redux'
+import { View } from 'react-native'
 import { Font } from 'expo'
 import store from './app/store'
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
@@ -10,6 +10,7 @@ import HomeScreen from './app/components/HomeScreen'
 import LoginScreen from './app/components/LoginScreen'
 import SignUpScreen from './app/components/SignUpScreen'
 import AuthLoadingScreen from './app/components/AuthLoadingScreen'
+import Loader from './app/utils/Loader'
 
 const AppStack = createStackNavigator({
   Home: HomeScreen
@@ -71,7 +72,13 @@ export default class App extends React.Component {
     if (this.state.fontLoaded) {
       return (
         <Provider store={store}>
-          <RootStack />
+          <View
+            style={{ flex: 1 }}
+            collapsable={false}
+          >
+            <Loader />
+            <RootStack />
+          </View>
         </Provider>
       )
     } else {
@@ -79,12 +86,3 @@ export default class App extends React.Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

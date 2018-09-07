@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { connect } from 'react-redux'
 import { login } from '../reducers/authReducer'
 import Notification from './Notification'
@@ -7,6 +7,7 @@ import { newErrorNotification } from '../reducers/notificationReducer'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Tile } from 'react-native-elements'
 import CustomButton from '../utils/CustomButton'
+import { setLoader, hideLoader } from '../reducers/loaderReducer'
 
 class LoginScreen extends React.Component {
 
@@ -26,6 +27,7 @@ class LoginScreen extends React.Component {
 
   onError = () => {
     this.props.newErrorNotification('Väärä sähköpostiosoite tai salasana', 5)
+    this.props.hideLoader()
   }
 
   render() {
@@ -65,7 +67,10 @@ class LoginScreen extends React.Component {
           <View style={{ marginTop: 15 }} />
           <CustomButton
             title1='Kirjaudu sisään'
-            onPress={this.handleLogin}
+            onPress={() => {
+              this.props.setLoader()
+              this.handleLogin()
+            }}
           />
         </View>
       </KeyboardAwareScrollView>
@@ -97,5 +102,5 @@ const styles = StyleSheet.create({
 
 export default connect(
   null,
-  { login, newErrorNotification }
+  { login, newErrorNotification, setLoader, hideLoader }
 )(LoginScreen)

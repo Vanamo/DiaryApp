@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 
 class Notification extends React.Component {
   render() {
@@ -17,8 +17,8 @@ class Notification extends React.Component {
         )
       } else if (notification.style === 'error') {
         return (
-          <View>
-            <Text>
+          <View style={styles.container}>
+            <Text style={styles.errorMessage}>
               {notification.message}
             </Text>
           </View>
@@ -31,6 +31,18 @@ class Notification extends React.Component {
     }
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginLeft: 13,
+    marginTop: 8
+  },
+  errorMessage: {
+    color: 'red',
+    fontFamily: 'caveat-regular',
+    fontSize: 17
+  }
+})
 
 const mapStateToProps = (state) => {
   return {

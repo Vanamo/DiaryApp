@@ -3,7 +3,8 @@ import { Button, StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import firebase from 'firebase'
 import { logout } from '../reducers/authReducer'
-import { newErrorNotification } from '../reducers/notificationReducer' 
+import { newErrorNotification } from '../reducers/notificationReducer'
+import { hideLoader } from '../reducers/loaderReducer'
 import Notification from './Notification'
 
 class HomeScreen extends React.Component {
@@ -15,6 +16,7 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     const { currentUser } = firebase.auth()
     this.setState({ currentUser })
+    this.props.hideLoader()
   }
 
   handleLogout = () => {
@@ -57,5 +59,5 @@ const styles = StyleSheet.create({
 
 export default connect(
   null,
-  { logout, newErrorNotification }
+  { logout, newErrorNotification, hideLoader }
 )(HomeScreen)

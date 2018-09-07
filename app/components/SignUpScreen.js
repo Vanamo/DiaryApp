@@ -7,6 +7,7 @@ import Notification from './Notification'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Tile } from 'react-native-elements'
 import CustomButton from '../utils/CustomButton'
+import { setLoader, hideLoader } from '../reducers/loaderReducer'
 
 class SignUpScreen extends React.Component {
 
@@ -17,7 +18,7 @@ class SignUpScreen extends React.Component {
     cPassword: ''
   }
 
-  handleSignUp = () => {
+  handleSignUp = async () => {
     const data = {
       email: this.state.email,
       password: this.state.password,
@@ -32,6 +33,7 @@ class SignUpScreen extends React.Component {
 
   onError = (error) => {
     this.props.newErrorNotification(error.message, 5)
+    this.props.hideLoader()
   }
 
   render() {
@@ -81,7 +83,10 @@ class SignUpScreen extends React.Component {
           <View style={{ marginTop: 15 }}/>
           <CustomButton
             title1='Luo käyttäjätunnus'
-            onPress={this.handleSignUp}
+            onPress={() => {
+              this.props.setLoader()
+              this.handleSignUp()
+            }}
           />
         </View>
       </KeyboardAwareScrollView>
@@ -113,5 +118,5 @@ const styles = StyleSheet.create({
 
 export default connect(
   null,
-  { register, newErrorNotification }
+  { register, newErrorNotification, setLoader, hideLoader }
 )(SignUpScreen)
