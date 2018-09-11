@@ -36,7 +36,7 @@ class HomeScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Notification/>
+        <Notification />
         <Text>
           Hei {currentUser && currentUser.email}!
         </Text>

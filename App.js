@@ -7,14 +7,32 @@ import { Font } from 'expo'
 import store from './app/store'
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
 import HomeScreen from './app/components/HomeScreen'
+import NoteScreen from './app/components/NoteScreen'
+import SearchScreen from './app/components/SearchScreen'
+import SettingsScreen from './app/components/SettingsScreen'
+import AppHeader from './app/components/AppHeader'
 import LoginScreen from './app/components/LoginScreen'
 import SignUpScreen from './app/components/SignUpScreen'
 import AuthLoadingScreen from './app/components/AuthLoadingScreen'
 import Loader from './app/utils/Loader'
 
-const AppStack = createStackNavigator({
-  Home: HomeScreen
-})
+
+const AppStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Note: NoteScreen,
+    Search: SearchScreen,
+    Settings: SettingsScreen
+  },
+  {
+    initialRouteName: 'Home',
+    navigationOptions: ({ navigation }) => ({
+      header: (
+        <AppHeader navigation={navigation} />
+      )
+    })
+  }
+)
 
 const AuthStack = createStackNavigator({
   SignUp: {
@@ -74,7 +92,6 @@ export default class App extends React.Component {
         <Provider store={store}>
           <View
             style={{ flex: 1 }}
-            collapsable={false}
           >
             <Loader />
             <RootStack />
