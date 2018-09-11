@@ -80,7 +80,8 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     await Font.loadAsync({
-      'caveat-regular': require('./assets/fonts/Caveat-Regular.ttf')
+      'caveat-regular': require('./assets/fonts/Caveat-Regular.ttf'),
+      'caveat-bold': require('./assets/fonts/Caveat-Bold.ttf')
     })
     this.setState({ fontLoaded: true })
   }

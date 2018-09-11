@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import firebase from 'firebase'
 import { hideOptions } from '../reducers/optionsModalReducer'
 import {
   Modal,
@@ -13,6 +14,15 @@ import { newErrorNotification } from '../reducers/notificationReducer'
 import { setLoader } from '../reducers/loaderReducer'
 
 class OptionsModal extends React.Component {
+
+  state = {
+    currentUser: null
+  }
+
+  componentDidMount() {
+    const { currentUser } = firebase.auth()
+    this.setState({ currentUser })
+  }
 
   handleLogout = () => {
     this.props.setLoader()
@@ -32,6 +42,8 @@ class OptionsModal extends React.Component {
   }
 
   render() {
+    const { currentUser } = this.state
+
     return (
       <Modal
         visible={this.props.optionsVisible}
@@ -46,6 +58,9 @@ class OptionsModal extends React.Component {
         >
           <View style={styles.optionsBackground}>
             <View style={styles.optionsWrapper}>
+              <View style={styles.optionAbove}>
+                <Text style={styles.userText}>{currentUser && currentUser.email}</Text>
+              </View>
               <TouchableWithoutFeedback
                 onPress={() => {
                   this.hideModal()
@@ -53,7 +68,7 @@ class OptionsModal extends React.Component {
                 }}
               >
                 <View style={styles.optionAbove}>
-                  <Text style={ styles.optionText }>Asetukset</Text>
+                  <Text style={styles.optionText}>Asetukset</Text>
                 </View>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback
@@ -63,7 +78,7 @@ class OptionsModal extends React.Component {
                 }}
               >
                 <View style={styles.optionBelow}>
-                  <Text style={ styles.optionText }>Kirjaudu ulos</Text>
+                  <Text style={styles.optionText}>Kirjaudu ulos</Text>
                 </View>
               </TouchableWithoutFeedback>
             </View>
@@ -84,7 +99,7 @@ const styles = StyleSheet.create({
   },
   optionsWrapper: {
     backgroundColor: '#FFFFFF',
-    height: 80,
+    height: 120,
     width: 120,
     display: 'flex',
     alignItems: 'flex-start',
@@ -112,6 +127,11 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     fontSize: 17,
     fontFamily: 'caveat-regular'
+  },
+  userText: {
+    paddingLeft: 5,
+    fontSize: 17,
+    fontFamily: 'caveat-bold'
   }
 })
 
