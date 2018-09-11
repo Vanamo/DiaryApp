@@ -2,8 +2,6 @@ import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import firebase from 'firebase'
-import { logout } from '../reducers/authReducer'
-import { newErrorNotification } from '../reducers/notificationReducer'
 import { hideLoader } from '../reducers/loaderReducer'
 import Notification from './Notification'
 
@@ -19,18 +17,6 @@ class HomeScreen extends React.Component {
     this.props.hideLoader()
   }
 
-  handleLogout = () => {
-    this.props.logout(this.onSuccess, this.onError)
-  }
-
-  onSuccess = () => {
-    this.props.navigation.navigate('AuthLoading')
-  }
-
-  onError = (error) => {
-    this.props.newErrorNotification(error.message, 5)
-  }
-
   render() {
     const { currentUser } = this.state
 
@@ -40,10 +26,6 @@ class HomeScreen extends React.Component {
         <Text>
           Hei {currentUser && currentUser.email}!
         </Text>
-        <Button
-          onPress={this.handleLogout}
-          title='Kirjaudu ulos'
-        />
       </View>
     )
   }
@@ -59,5 +41,5 @@ const styles = StyleSheet.create({
 
 export default connect(
   null,
-  { logout, newErrorNotification, hideLoader }
+  { hideLoader }
 )(HomeScreen)

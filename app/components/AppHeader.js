@@ -1,6 +1,7 @@
 import React from 'react'
 import { Header, Icon } from 'react-native-elements'
-import { StyleSheet, View } from 'react-native'
+import RightComponent from './RightHeaderComponent'
+import OptionsModal from './OptionsModal'
 
 const LeftComponent = ({ navigation }) => {
   return (
@@ -24,24 +25,6 @@ const CenterComponent = ({ navigation }) => {
   )
 }
 
-const RightComponent = ({ navigation }) => {
-  return (
-    <View style={styles.rightCOmponent}>
-      <Icon
-        name='magnifying-glass'
-        type='entypo'
-        color='white'
-        onPress={() => navigation.navigate('Search')}
-      />
-      <Icon
-        name='dots-three-vertical'
-        type='entypo'
-        color='white'
-      />
-    </View>
-  )
-}
-
 const AppHeader = ({ navigation }) => {
   return (
     <Header
@@ -50,17 +33,9 @@ const AppHeader = ({ navigation }) => {
       <LeftComponent navigation={navigation} />
       <CenterComponent navigation={navigation} />
       <RightComponent navigation={navigation} />
+      <OptionsModal navigation={navigation}/>
     </Header>
   )
 }
-
-const styles = StyleSheet.create({
-  rightCOmponent: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: 70
-  }
-})
 
 export default AppHeader

@@ -18,6 +18,10 @@ class SignUpScreen extends React.Component {
     cPassword: ''
   }
 
+  componentDidMount() {
+    this.props.hideLoader()
+  }
+
   handleSignUp = async () => {
     const data = {
       email: this.state.email,
