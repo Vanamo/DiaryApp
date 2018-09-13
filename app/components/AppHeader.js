@@ -28,7 +28,7 @@ const CenterComponent = ({ navigation }) => {
 const AppHeader = ({ navigation }) => {
   return (
     <Header
-      outerContainerStyles={{ backgroundColor: '#513315', height: 90 }}
+      outerContainerStyles={{ backgroundColor: '#595959', height: 90 }}
     >
       <LeftComponent navigation={navigation} />
       <CenterComponent navigation={navigation} />

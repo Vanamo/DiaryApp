@@ -1,5 +1,6 @@
 import React from 'react'
 import firebase from 'firebase'
+import { LocaleConfig } from 'react-native-calendars'
 import * as c from './app/config/constants'
 import { Provider } from 'react-redux'
 import { View } from 'react-native'
@@ -71,6 +72,20 @@ const config = {
 }
 
 firebase.initializeApp(config)
+
+//Configure calendar
+
+LocaleConfig.locales['fi'] = {
+  monthNames: ['Tammikuu', 'Helmikuu', 'Malliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu',
+    'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'],
+  monthNamesShort: ['Tammi', 'Helmi', 'Maalis', 'Huhti', 'Touko', 'Kesä', 'Heinä', 'Elo',
+    'Syys', 'Loka', 'Marras', 'Joulu'],
+  dayNames: ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai',
+    'Perjantai', 'Lauantai'],
+  dayNamesShort: ['Su', 'Ma', 'Ti', 'Ke', 'To', 'Pe', 'La']
+}
+
+LocaleConfig.defaultLocale = 'fi'
 
 export default class App extends React.Component {
 
