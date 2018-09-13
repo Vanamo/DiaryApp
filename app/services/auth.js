@@ -46,4 +46,4 @@ const logout = (callback) => {
     })
 }
 
-export default { register, login, logout }
+export default { getUser, register, login, logout }

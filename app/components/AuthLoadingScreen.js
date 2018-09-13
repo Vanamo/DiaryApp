@@ -1,12 +1,19 @@
 import React from 'react'
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
+import { View, ActivityIndicator, StyleSheet } from 'react-native'
 import firebase from 'firebase'
+import { setUser } from '../reducers/authReducer'
 
 class AuthLoadingScreen extends React.Component {
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? 'Home' : 'SignUp')
+      if (user) {
+        this.props.setUser(user)
+        this.props.navigation.navigate('Home')
+      } else {
+        this.props.navigation.navigate('SignUp')
+      }
     })
   }
 
@@ -27,4 +34,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AuthLoadingScreen
+export default connect(
+  null,
+  { setUser }
+)(AuthLoadingScreen)

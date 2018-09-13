@@ -20,8 +20,15 @@ class OptionsModal extends React.Component {
   }
 
   componentDidMount() {
-    const { currentUser } = firebase.auth()
+    const currentUser = this.props.auth.user
     this.setState({ currentUser })
+  }
+
+  componentDidUpdate(prevProps) {
+    const currentUser = this.props.auth.user
+    if (currentUser !== prevProps.auth.user) {
+      this.setState({ currentUser })
+    }
   }
 
   handleLogout = () => {
@@ -42,7 +49,10 @@ class OptionsModal extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.state
+    const currentUser = this.state.currentUser
+    if (!currentUser) {
+      return null
+    }
 
     return (
       <Modal
@@ -59,7 +69,7 @@ class OptionsModal extends React.Component {
           <View style={styles.optionsBackground}>
             <View style={styles.optionsWrapper}>
               <View style={styles.optionAbove}>
-                <Text style={styles.userText}>{currentUser && currentUser.email}</Text>
+                <Text style={styles.userText}>{currentUser && currentUser.username} </Text>
               </View>
               <TouchableWithoutFeedback
                 onPress={() => {
@@ -137,7 +147,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    optionsVisible: state.optionsVisible
+    optionsVisible: state.optionsVisible,
+    auth: state.auth
   }
 }
 

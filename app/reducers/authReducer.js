@@ -17,6 +17,8 @@ const reducer = (state = initialState, action) => {
       AsyncStorage.multiRemove(keys)
 
       return { ...state, isLoggedIn: false, user: null }
+    case 'SET_USER':
+      return { ...state, isLoggedIn: true, user: action.data }
   }
   return state
 }
@@ -41,7 +43,7 @@ export const login = (userData, successCB, errorCB) => {
   return (dispatch) => {
     authServices.login(userData, function (success, data, error) {
       if (success) {
-        if (userData.exists) {
+        if (data.exists) {
           dispatch({
             type: 'LOGIN',
             data: data.user
@@ -50,6 +52,23 @@ export const login = (userData, successCB, errorCB) => {
         successCB()
       } else if (error) {
         errorCB()
+      }
+    })
+  }
+}
+
+export const setUser = (user) => {
+  return (dispatch) => {
+    authServices.getUser(user, function (success, data, error) {
+      if (success) {
+        if (data.exists) {
+          dispatch({
+            type: 'SET_USER',
+            data: data.user
+          })
+        }
+      } else if (error) {
+        console.log('no user')
       }
     })
   }
