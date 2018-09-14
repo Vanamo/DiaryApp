@@ -12,9 +12,6 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    const currentDate = new Date().toJSON().slice(0,10)
-    console.log('date', currentDate)  
-
     return (
       <View style={styles.container}>
         <View style={{ height: 100 }}>
@@ -23,7 +20,7 @@ class HomeScreen extends React.Component {
         <CalendarList
           horizontal={true}
           pagingEnabled={true}
-          maxDate={currentDate}
+          maxDate={new Date()}
         />
       </View>
     )
