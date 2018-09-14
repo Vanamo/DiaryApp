@@ -55,6 +55,7 @@ class LoginScreen extends React.Component {
             placeholder='Sähköpostiosoite'
             onChangeText={email => this.setState({ email })}
             value={this.state.email}
+            underlineColorAndroid='transparent'
           />
           <TextInput
             secureTextEntry
@@ -63,6 +64,7 @@ class LoginScreen extends React.Component {
             placeholder='Salasana'
             onChangeText={password => this.setState({ password })}
             value={this.state.password}
+            underlineColorAndroid='transparent'
           />
           <View style={{ marginTop: 15 }} />
           <CustomButton
