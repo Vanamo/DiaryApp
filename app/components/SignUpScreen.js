@@ -2,12 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { register } from '../reducers/authReducer'
-import { newErrorNotification } from '../reducers/notificationReducer'
 import Notification from './Notification'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Tile } from 'react-native-elements'
 import CustomButton from '../utils/CustomButton'
-import { setLoader, hideLoader } from '../reducers/loaderReducer'
 
 class SignUpScreen extends React.Component {
 
@@ -18,26 +16,17 @@ class SignUpScreen extends React.Component {
     cPassword: ''
   }
 
-  componentDidMount() {
-    this.props.hideLoader()
-  }
-
   handleSignUp = async () => {
     const data = {
       email: this.state.email,
       password: this.state.password,
       username: this.state.username
     }
-    this.props.register(data, this.onSuccess, this.onError)
+    this.props.register(data, this.onSuccess)
   }
 
   onSuccess = () => {
     this.props.navigation.navigate('Home')
-  }
-
-  onError = (error) => {
-    this.props.newErrorNotification(error.message, 5)
-    this.props.hideLoader()
   }
 
   render() {
@@ -87,10 +76,7 @@ class SignUpScreen extends React.Component {
           <View style={{ marginTop: 15 }}/>
           <CustomButton
             title1='Luo käyttäjätunnus'
-            onPress={() => {
-              this.props.setLoader()
-              this.handleSignUp()
-            }}
+            onPress={this.handleSignUp}
           />
         </View>
       </KeyboardAwareScrollView>
@@ -122,5 +108,5 @@ const styles = StyleSheet.create({
 
 export default connect(
   null,
-  { register, newErrorNotification, setLoader, hideLoader }
+  { register }
 )(SignUpScreen)

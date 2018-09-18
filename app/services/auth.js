@@ -1,14 +1,14 @@
-import firebase from 'firebase'
+import { db, auth } from '../config/db'
 
 const register = (data, callback) => {
   const { email, password, username } = data
-  firebase.auth().createUserWithEmailAndPassword(email, password)
+  auth.createUserWithEmailAndPassword(email, password)
     .then((resp) => createUser({ username, uid: resp.user.uid }, callback))
     .catch((error) => callback(false, null, error))
 }
 
 const createUser = (user, callback) => {
-  const userRef = firebase.database().ref().child('users')
+  const userRef = db.ref().child('users')
 
   userRef.child(user.uid).update({ ...user })
     .then(() => callback(true, user, null))
@@ -17,13 +17,13 @@ const createUser = (user, callback) => {
 
 const login = (data, callback) => {
   const { email, password } = data
-  firebase.auth().signInWithEmailAndPassword(email, password)
+  auth.signInWithEmailAndPassword(email, password)
     .then((resp) => getUser(resp.user, callback))
     .catch((error) => callback(false, null, error))
 }
 
 const getUser = (user, callback) => {
-  firebase.database().ref('users').child(user.uid).once('value')
+  db.ref('users').child(user.uid).once('value')
     .then(function (snapshot) {
       const exists = (snapshot.val() !== null)
       if (exists) {
@@ -37,7 +37,7 @@ const getUser = (user, callback) => {
 }
 
 const logout = (callback) => {
-  firebase.auth().signOut()
+  auth.signOut()
     .then(() => {
       if (callback) callback(true, null, null)
     })

@@ -10,8 +10,6 @@ import {
   View
 } from 'react-native'
 import { logout } from '../reducers/authReducer'
-import { newErrorNotification } from '../reducers/notificationReducer'
-import { setLoader } from '../reducers/loaderReducer'
 
 class OptionsModal extends React.Component {
 
@@ -32,16 +30,11 @@ class OptionsModal extends React.Component {
   }
 
   handleLogout = () => {
-    this.props.setLoader()
-    this.props.logout(this.onSuccess, this.onError)
+    this.props.logout(this.onSuccess)
   }
 
   onSuccess = () => {
     this.props.navigation.navigate('AuthLoading')
-  }
-
-  onError = (error) => {
-    this.props.newErrorNotification(error.message, 5)
   }
 
   hideModal = () => {
@@ -154,5 +147,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { hideOptions, logout, newErrorNotification, setLoader }
+  { hideOptions, logout }
 )(OptionsModal)

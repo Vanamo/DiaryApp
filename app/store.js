@@ -5,12 +5,14 @@ import authReducer from './reducers/authReducer'
 import notificationReducer from './reducers/notificationReducer'
 import loaderReducer from './reducers/loaderReducer'
 import optionsModalReducer from './reducers/optionsModalReducer'
+import noteReducer from './reducers/noteReducer'
 
 const reducer = combineReducers({
   auth: authReducer,
   notification: notificationReducer,
   loading: loaderReducer,
-  optionsVisible: optionsModalReducer
+  optionsVisible: optionsModalReducer,
+  notes: noteReducer
 })
 
 const store = createStore(

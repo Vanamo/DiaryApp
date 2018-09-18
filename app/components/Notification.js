@@ -9,8 +9,8 @@ class Notification extends React.Component {
     if (notification.message) {
       if (notification.style === 'success') {
         return (
-          <View>
-            <Text>
+          <View style={ styles.container }>
+            <Text style={ styles.successMessage }>
               {notification.message}
             </Text>
           </View>
@@ -36,6 +36,11 @@ const styles = StyleSheet.create({
   container: {
     marginLeft: 13,
     marginTop: 8
+  },
+  successMessage: {
+    color: 'green',
+    fontFamily: 'caveat-regular',
+    fontSize: 17    
   },
   errorMessage: {
     color: 'red',

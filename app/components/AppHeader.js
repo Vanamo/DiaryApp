@@ -20,7 +20,7 @@ const CenterComponent = ({ navigation }) => {
       name='pencil'
       type='entypo'
       color='white'
-      onPress={() => navigation.navigate('Note')}
+      onPress={() => navigation.navigate('NewNote')}
     />
   )
 }

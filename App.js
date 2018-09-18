@@ -1,14 +1,13 @@
 import React from 'react'
-import firebase from 'firebase'
 import { LocaleConfig } from 'react-native-calendars'
-import * as c from './app/config/constants'
 import { Provider } from 'react-redux'
 import { View } from 'react-native'
 import { Font } from 'expo'
 import store from './app/store'
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
 import HomeScreen from './app/components/HomeScreen'
-import NoteScreen from './app/components/NoteScreen'
+import NewNoteScreen from './app/components/NewNoteScreen'
+import EditNoteScreen from './app/components/EditNoteScreen'
 import SearchScreen from './app/components/SearchScreen'
 import SettingsScreen from './app/components/SettingsScreen'
 import AppHeader from './app/components/AppHeader'
@@ -21,7 +20,8 @@ import Loader from './app/utils/Loader'
 const AppStack = createStackNavigator(
   {
     Home: HomeScreen,
-    Note: NoteScreen,
+    NewNote: NewNoteScreen,
+    EditNote: EditNoteScreen,
     Search: SearchScreen,
     Settings: SettingsScreen
   },
@@ -60,18 +60,6 @@ const RootStack = createSwitchNavigator(
     initialRouteName: 'AuthLoading'
   }
 )
-
-// Initialize Firebase
-const config = {
-  apiKey: c.FIREBASE_API_KEY,
-  authDomain: c.FIREBASE_AUTH_DOMAIN,
-  databaseURL: c.FIREBASE_DATABASE_URL,
-  projectId: c.FIREBASE_PROJECT_ID,
-  storageBucket: c.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: c.FIREBASE_MESSAGING_SENDER_ID
-}
-
-firebase.initializeApp(config)
 
 //Configure calendar
 

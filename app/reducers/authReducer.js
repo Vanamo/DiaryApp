@@ -23,24 +23,34 @@ const reducer = (state = initialState, action) => {
   return state
 }
 
-export const register = (userData, successCB, errorCB) => {
+export const register = (userData, successCB) => {
   return (dispatch) => {
+    dispatch({ type: 'SET_LOADER' })
     authServices.register(userData, function (success, data, error) {
       if (success) {
         dispatch({
           type: 'LOGIN',
           data
         })
-        successCB(userData)
+        successCB()
       } else if (error) {
-        errorCB(error)
+        dispatch({
+          type: 'ERROR',
+          message: error.message,
+          style: 'error'
+        })
+        setTimeout(() => {
+          dispatch({ type: 'HIDE_NOTIFICATION' })
+        }, 5000)  
       }
     })
+    dispatch({ type: 'HIDE_LOADER' })
   }
 }
 
-export const login = (userData, successCB, errorCB) => {
+export const login = (userData, successCB) => {
   return (dispatch) => {
+    dispatch({ type: 'SET_LOADER' })
     authServices.login(userData, function (success, data, error) {
       if (success) {
         if (data.exists) {
@@ -51,8 +61,16 @@ export const login = (userData, successCB, errorCB) => {
         }
         successCB()
       } else if (error) {
-        errorCB()
+        dispatch({
+          type: 'ERROR',
+          message: 'Väärä käyttäjätunnus tai salasana',
+          style: 'error'
+        })
+        setTimeout(() => {
+          dispatch({ type: 'HIDE_NOTIFICATION' })
+        }, 5000)        
       }
+      dispatch({ type: 'HIDE_LOADER' })
     })
   }
 }
@@ -76,14 +94,25 @@ export const setUser = (user) => {
 
 export const logout = (successCB, errorCB) => {
   return (dispatch) => {
+    dispatch({ type: 'SET_LOADER' })
     authServices.logout(function (success, data, error) {
       if (success) {
         dispatch({
           type: 'LOGOUT'
         })
         successCB()
-      } else if (error) errorCB(error)
+      } else if (error) {
+        dispatch({
+          type: 'ERROR',
+          message: error.message,
+          style: 'error'
+        })
+        setTimeout(() => {
+          dispatch({ type: 'HIDE_NOTIFICATION' })
+        }, 5000)        
+      }
     })
+    dispatch({ type: 'HIDE_LOADER' })
   }
 }
 
