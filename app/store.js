@@ -12,7 +12,7 @@ const reducer = combineReducers({
   notification: notificationReducer,
   loading: loaderReducer,
   optionsVisible: optionsModalReducer,
-  notes: noteReducer
+  userNotes: noteReducer
 })
 
 const store = createStore(

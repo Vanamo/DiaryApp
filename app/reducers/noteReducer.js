@@ -2,8 +2,12 @@ import noteService from '../services/notes'
 
 const reducer = (state = null, action) => {
   switch (action.type) {
-    case 'INIT_NOTES':
-      return action.data
+    case 'INIT_USER_NOTES':
+      if (action.data) {
+        return Object.values(action.data)
+      } else {
+        return state
+      }
     case 'NEW_NOTE':
       return [...state, action.data]
     case 'UPDATE_NOTE': {
@@ -19,12 +23,12 @@ const reducer = (state = null, action) => {
   return state
 }
 
-export const initNotes = () => {
+export const initUserNotes = (userId) => {
   return async (dispatch) => {
-    await noteService.getAll(function (success, data, error) {
+    await noteService.getUserNotes(userId, function (success, data, error) {
       if (success) {
         dispatch({
-          type: 'INIT_NOTES',
+          type: 'INIT_USER_NOTES',
           data
         })
       } else if (error) {

@@ -66,7 +66,7 @@ class NewNoteScreen extends React.Component {
     } else {
       const note = {
         startDate: this.state.startDate,
-        endDate: this.state.endDate,
+        endDate: this.state.endDate || this.state.startDate,
         content: this.state.content,
         textInputs: this.state.textInputs,
         userId: this.props.auth.user.uid

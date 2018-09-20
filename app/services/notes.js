@@ -16,8 +16,8 @@ const create = (note, callback) => {
     .catch((error) => callback(false, null, error))
 }
 
-const getAll = (callback) => {
-  const notesRef = db.ref('notes')
+const getUserNotes = (userId, callback) => {
+  const notesRef = db.ref('user-notes/' + userId)
 
   notesRef.on('value', snapshot => {
     callback(true, snapshot.val(), null)
@@ -50,4 +50,4 @@ const remove = (note, callback) => {
     .catch((error) => callback(false, null, error))
 }
 
-export default { create, getAll, update, remove }
+export default { create, getUserNotes, update, remove }

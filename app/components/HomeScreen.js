@@ -1,45 +1,48 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
-import { initNotes } from '../reducers/noteReducer'
+import { initUserNotes } from '../reducers/noteReducer'
 import Notification from './Notification'
 import { CalendarList } from 'react-native-calendars'
 
 class HomeScreen extends React.Component {
 
+  state = {
+    currentUser: null
+  }
+
   componentDidMount() {
-    this.props.initNotes()
+    const currentUser = this.props.auth.user
+    this.setState({ currentUser })
+  }
+
+  componentDidUpdate(prevProps) {
+    const currentUser = this.props.auth.user
+    if (currentUser !== prevProps.auth.user) {
+      this.setState({ currentUser })
+      console.log('user', currentUser)
+      this.props.initUserNotes(currentUser.uid)
+    }
   }
 
   formulateDate = (note) => {
     console.log('n', note)
-    let startDateString = null
-    let endDateString = null
-    if (note.startDate) {
-      startDateString = '\'' + note.startDate + '\': {startingDay: true, '
-      if (note.endDate) {
-        startDateString += 'color:\'gray\'},'
-        endDateString = '\'' + note.endDate + '\': {endingDay: true, color:\'gray\'},'
-      } else {
-        startDateString += 'color:\'gray\', endingDay: true},'
-      }
-    }
-    let dateString = startDateString
-    if (endDateString) {
-      dateString = startDateString + endDateString
-    }
+    const startDateString = '\'' + note.startDate + '\': {startingDay: true, color:\'gray\'}, '
+    const endDateString = '\'' + note.endDate + '\': {endingDay: true, color:\'gray\'}, '
+
+    const dateString = startDateString + endDateString
     console.log('s', dateString)
     return dateString
   }
 
   render() {
-    if (!this.props.notes) {
-      return null
+    const userNotes = this.props.userNotes
+    console.log('notes', userNotes)
+    if (userNotes) {
+      this.formulateDate(userNotes[1])
+      //const markedDates = notes.map(n => this.formulateDate(n))
+      //console.log('md', markedDates)
     }
-    const notes = Object.values(this.props.notes)
-    this.formulateDate(notes[1])
-    //const markedDates = notes.map(n => this.formulateDate(n))
-    //console.log('md', markedDates)
 
     return (
       <View style={styles.container}>
@@ -68,11 +71,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
-    notes: state.notes
+    userNotes: state.userNotes
   }
 }
 
 export default connect(
   mapStateToProps,
-  { initNotes }
+  { initUserNotes }
 )(HomeScreen)

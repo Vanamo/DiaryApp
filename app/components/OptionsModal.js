@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import firebase from 'firebase'
 import { hideOptions } from '../reducers/optionsModalReducer'
 import {
   Modal,
