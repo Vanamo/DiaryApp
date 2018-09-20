@@ -1,6 +1,6 @@
 import noteService from '../services/notes'
 
-const reducer = (state = [], action) => {
+const reducer = (state = null, action) => {
   switch (action.type) {
     case 'INIT_NOTES':
       return action.data
@@ -19,15 +19,17 @@ const reducer = (state = [], action) => {
   return state
 }
 
-export const initNotes = (errorCB) => {
+export const initNotes = () => {
   return async (dispatch) => {
     await noteService.getAll(function (success, data, error) {
       if (success) {
         dispatch({
           type: 'INIT_NOTES',
-          data: notes
+          data
         })
-      } else if (error) errorCB(error)
+      } else if (error) {
+        console.log(error.message)
+      }
     })
 
   }

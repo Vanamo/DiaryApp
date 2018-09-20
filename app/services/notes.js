@@ -19,8 +19,8 @@ const create = (note, callback) => {
 const getAll = (callback) => {
   const notesRef = db.ref('notes')
 
-  notesRef.on('value', function(snapshot) {
-    callback(true, snapshot, null)
+  notesRef.on('value', snapshot => {
+    callback(true, snapshot.val(), null)
   })
 }
 

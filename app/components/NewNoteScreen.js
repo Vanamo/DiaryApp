@@ -61,15 +61,19 @@ class NewNoteScreen extends React.Component {
   }
 
   save = async () => {
-    const note = {
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
-      content: this.state.content,
-      textInputs: this.state.textInputs,
-      userId: this.props.auth.user.uid
-    }
+    if (!this.state.startDate) {
+      this.props.newErrorNotification('Valitse alkupäivä', 5)
+    } else {
+      const note = {
+        startDate: this.state.startDate,
+        endDate: this.state.endDate,
+        content: this.state.content,
+        textInputs: this.state.textInputs,
+        userId: this.props.auth.user.uid
+      }
 
-    await this.props.newNote(note, this.onSuccess)
+      await this.props.newNote(note, this.onSuccess)
+    }
   }
 
   onSuccess = (note) => {
