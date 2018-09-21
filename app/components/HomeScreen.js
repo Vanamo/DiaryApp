@@ -25,23 +25,66 @@ class HomeScreen extends React.Component {
     }
   }
 
+  convertToDates = (userNotes) => {
+    let string = '{'
+    for (let i in userNotes) {
+      string += this.formulateDate(userNotes[i])
+    }
+    string = string.slice(0, -2)
+    string += '}'
+    console.log('st', string)
+    return JSON.parse(string)
+  }
+
   formulateDate = (note) => {
     console.log('n', note)
-    const startDateString = '\'' + note.startDate + '\': {startingDay: true, color:\'gray\'}, '
-    const endDateString = '\'' + note.endDate + '\': {endingDay: true, color:\'gray\'}, '
+    const startDate = note.startDate.split('.').reverse().join('-')
+    const endDate = note.endDate.split('.').reverse().join('-')
 
-    const dateString = startDateString + endDateString
+    let dateString = ''
+    if (startDate === endDate) {
+      dateString += '\"' + startDate + '\": {\"startingDay\": true, \"color\":\"gray\", \"endingDay\": true}, '
+    } else {
+      const startDateString = '\"' + startDate + '\": {\"startingDay\": true, \"color\":\"gray\"}, '
+      const endDateString = '\"' + endDate + '\": {\"endingDay\": true, \"color\":\"gray\"}, '
+
+      const datesBetween = this.getDates(startDate, endDate)
+      let datesBetweenString = ''
+      for (let i in datesBetween) {
+        datesBetweenString += '\"' + datesBetween[i] + '\": {\"marked\": true, \"color\":\"gray\"}, '
+      }
+
+      dateString += startDateString + datesBetweenString + endDateString
+    }
     console.log('s', dateString)
     return dateString
+  }
+
+  getDates = (startDate, endDate) => {
+    const dateArray = new Array()
+    const firstDate = new Date(startDate)
+    let currentDate = new Date()
+    currentDate.setDate(firstDate.getDate()+1)
+    const stopDate = new Date(endDate)
+    while (currentDate < stopDate) {
+      dateArray.push(new Date(currentDate))
+      currentDate.setDate(currentDate.getDate()+1)
+    }
+    return dateArray
   }
 
   render() {
     const userNotes = this.props.userNotes
     console.log('notes', userNotes)
-    if (userNotes) {
-      this.formulateDate(userNotes[1])
-      //const markedDates = notes.map(n => this.formulateDate(n))
-      //console.log('md', markedDates)
+    let markedDates = { '2018-09-19': { startingDay: true, color: 'green' },
+      '2018-09-20': { marked: true, color: 'green' },
+      '2018-09-21': { endingDay: true, color: 'green' }
+    }
+    if (!userNotes) {
+      return null
+    } else {
+      markedDates = this.convertToDates(userNotes)
+      console.log('md', markedDates)
     }
 
     return (
@@ -53,6 +96,8 @@ class HomeScreen extends React.Component {
           horizontal={true}
           pagingEnabled={true}
           maxDate={new Date()}
+          markedDates={markedDates}
+          markingType={'period'}
         />
       </View>
     )

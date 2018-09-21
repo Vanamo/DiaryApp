@@ -6,7 +6,7 @@ const reducer = (state = null, action) => {
       if (action.data) {
         return Object.values(action.data)
       } else {
-        return state
+        return []
       }
     case 'NEW_NOTE':
       return [...state, action.data]
