@@ -24,8 +24,8 @@ const reducer = (state = null, action) => {
 }
 
 export const initUserNotes = (userId) => {
-  return async (dispatch) => {
-    await noteService.getUserNotes(userId, function (success, data, error) {
+  return (dispatch) => {
+    noteService.getUserNotes(userId, function (success, data, error) {
       if (success) {
         dispatch({
           type: 'INIT_USER_NOTES',
@@ -39,9 +39,9 @@ export const initUserNotes = (userId) => {
 }
 
 export const newNote = (noteObject, successCB) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({ type: 'SET_LOADER' })
-    await noteService.create(noteObject, function (success, data, error) {
+    noteService.create(noteObject, function (success, data, error) {
       if (success) {
         dispatch({
           type: 'NEW_NOTE',
@@ -72,9 +72,9 @@ export const newNote = (noteObject, successCB) => {
 }
 
 export const updateNote = (changedNote) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({ type: 'SET_LOADER' })
-    await noteService.update(changedNote, function (success, data, error) {
+    noteService.update(changedNote, function (success, data, error) {
       if (success) {
         dispatch({
           type: 'UPDATE_NOTE',
@@ -104,8 +104,8 @@ export const updateNote = (changedNote) => {
 }
 
 export const deleteNote = (noteObject, errorCB) => {
-  return async (dispatch) => {
-    await noteService.remove(noteObject, function (success, data, error) {
+  return (dispatch) => {
+    noteService.remove(noteObject, function (success, data, error) {
       if (success) {
         dispatch({
           type: 'DELETE_NOTE',

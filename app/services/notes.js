@@ -28,7 +28,6 @@ const update = (note, callback) => {
   const userId = note.userId
 
   let updates = {}
-  updates['/notes/' + id] = note
   updates['/user-notes/' + userId + '/' + id] = note
 
   db.ref().update(updates)
@@ -41,7 +40,6 @@ const remove = (note, callback) => {
   const userId = note.userId
 
   let updates = {}
-  updates['notes/' + id] = null
   updates['/user-notes/' + userId + '/' + id] = null
 
   db.ref().update(updates)

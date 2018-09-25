@@ -64,34 +64,57 @@ class NewNoteScreen extends React.Component {
   save = async () => {
     if (!this.state.startDate) {
       this.props.newErrorNotification('Valitse alkupäivä', 5)
-    } else {
-      const note = {
-        startDate: this.state.startDate,
-        endDate: this.state.endDate || this.state.startDate,
-        content: this.state.content,
-        textInputs: this.state.textInputs,
-        userId: this.props.auth.user.uid
-      }
-
-      const firstDate = note.startDate.split('.').reverse().join('-')
-      const lastDate = note.endDate.split('.').reverse().join('-')
-      const reservedDays = this.getDates(firstDate, lastDate)
-
-      for (let i in reservedDays) {
-        const date = reservedDays[i]
-        const startDate = (date === firstDate)
-        const endDate = (date === lastDate)
-        const reservedDay = {
-          date,
-          userId: this.props.auth.user.uid,
-          startDate,
-          endDate
-        }
-        await this.props.newReservedDay(reservedDay)
-      }
-
-      await this.props.newNote(note, this.onSuccess)
+      return
     }
+
+    const note = {
+      startDate: this.state.startDate,
+      endDate: this.state.endDate || this.state.startDate,
+      content: this.state.content,
+      textInputs: this.state.textInputs,
+      userId: this.props.auth.user.uid
+    }
+
+    //Check if dates are valid and not used in another note
+
+    const firstDate = note.startDate.split('.').reverse().join('-')
+    const lastDate = note.endDate.split('.').reverse().join('-')
+
+    if (new Date(firstDate) > new Date(lastDate)) {
+      this.props.newErrorNotification('Alkupäivän on oltava ennen loppupäivää', 5)
+      return
+    }
+
+    const reservedDays = this.getDates(firstDate, lastDate)
+
+    if (this.checkDates(reservedDays)) {
+      this.props.newErrorNotification('Samalle päivälle on jo muistiinpano', 5)
+      return
+    }
+
+    for (let i in reservedDays) {
+      const date = reservedDays[i]
+      const startDate = (date === firstDate)
+      const endDate = (date === lastDate)
+      const reservedDay = {
+        date,
+        userId: this.props.auth.user.uid,
+        startDate,
+        endDate
+      }
+      await this.props.newReservedDay(reservedDay)
+    }
+
+    await this.props.newNote(note, this.onSuccess)
+  }
+
+  checkDates = (dateArray) => {
+    for (let i in dateArray) {
+      const reservedDate = this.props.reservedDays.find(rd =>
+        rd.date === dateArray[i])
+      if (reservedDate) return true
+    }
+    return false
   }
 
   getDates = (startDate, endDate) => {
@@ -140,7 +163,8 @@ class NewNoteScreen extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    reservedDays: state.reservedDays
   }
 }
 

@@ -9,7 +9,7 @@ const reducer = (state = false, action) => {
 }
 
 export const setLoader = () => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: 'SET_LOADER'
     })
@@ -17,7 +17,7 @@ export const setLoader = () => {
 }
 
 export const hideLoader = () => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: 'HIDE_LOADER'
     })

@@ -31,7 +31,7 @@ const remove = (reservedDay, callback) => {
   updates['/user-reservedDays/' + userId + '/' + id] = null
 
   db.ref().update(updates)
-    .then(() => callback(true, note, null))
+    .then(() => callback(true, reservedDay, null))
     .catch((error) => callback(false, null, error))
 }
 

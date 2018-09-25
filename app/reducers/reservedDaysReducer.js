@@ -8,8 +8,6 @@ const reducer = (state = null, action) => {
       } else {
         return []
       }
-    case 'NEW_RESERVED_DAY':
-      return [...state, action.data]
     case 'DELETE_RESERVED_DAY': {
       const id = action.data.id
       return state.filter(n => n.id !== id)
@@ -19,8 +17,8 @@ const reducer = (state = null, action) => {
 }
 
 export const initReservedDays = (userId) => {
-  return async (dispatch) => {
-    await reservedDayService.getReservedDays(userId, function (success, data, error) {
+  return (dispatch) => {
+    reservedDayService.getReservedDays(userId, function (success, data, error) {
       if (success) {
         dispatch({
           type: 'INIT_RESERVED_DAYS',
@@ -34,13 +32,10 @@ export const initReservedDays = (userId) => {
 }
 
 export const newReservedDay = (reservedDayObject) => {
-  return async (dispatch) => {
-    await reservedDayService.create(reservedDayObject, function (success, data, error) {
+  return (dispatch) => {
+    reservedDayService.create(reservedDayObject, function (success, data, error) {
       if (success) {
-        dispatch({
-          type: 'NEW_RESERVED_DAY',
-          data
-        })
+        console.log('newReservedDay', data)
       } else if (error) {
         console.log(error.message)
       }
@@ -48,16 +43,13 @@ export const newReservedDay = (reservedDayObject) => {
   }
 }
 
-export const deleteReservedDay = (reservedDayObject, errorCB) => {
-  return async (dispatch) => {
-    await reservedDayService.remove(reservedDayObject, function (success, data, error) {
+export const deleteReservedDay = (reservedDayObject) => {
+  return (dispatch) => {
+    reservedDayService.remove(reservedDayObject, function (success, data, error) {
       if (success) {
-        dispatch({
-          type: 'DELETE_RESERVED_DAY',
-          data: data.id
-        })
+        console.log('reserved day removed', data.id)
       } else if (error) {
-        errorCB(error)
+        console.log(error.message)
       }
     })
   }
