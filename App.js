@@ -8,6 +8,7 @@ import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
 import HomeScreen from './app/components/HomeScreen'
 import NewNoteScreen from './app/components/NewNoteScreen'
 import EditNoteScreen from './app/components/EditNoteScreen'
+import NoteViewScreen from './app/components/NoteViewScreen'
 import SearchScreen from './app/components/SearchScreen'
 import SettingsScreen from './app/components/SettingsScreen'
 import AppHeader from './app/components/AppHeader'
@@ -22,6 +23,7 @@ const AppStack = createStackNavigator(
     Home: HomeScreen,
     NewNote: NewNoteScreen,
     EditNote: EditNoteScreen,
+    NoteView: NoteViewScreen,
     Search: SearchScreen,
     Settings: SettingsScreen
   },

@@ -1,17 +1,29 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-class NoteView extends React.Component {
+class NoteViewScreen extends React.Component {
   render() {
-    let date = this.props.startDate
-    if (this.props.endDate) {
-      date = date + '–' + this.props.endDate 
+    console.log('nav', this.props.navigation)
+    const note = this.props.navigation.state.params.note
+
+    let date = note.startDate
+    if (note.endDate !== date) {
+      date = date + '–' + note.endDate 
     }
     return(
       <View style={ styles.noteBackground }>
         <Text style={ styles.text }>{date}</Text>
         <View style={{ height: 10 }}/>
-        <Text style={ styles.text }>{this.props.textInput}</Text>
+        {note.textInputs.map((t, ind) => (
+          <Text
+            style={ styles.text }
+            key={ind}
+          >
+            {t.text}
+          </Text>
+        ))}
+
+
       </View>
     )
   }
@@ -35,4 +47,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default NoteView
+export default NoteViewScreen

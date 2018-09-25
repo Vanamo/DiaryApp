@@ -55,17 +55,34 @@ class HomeScreen extends React.Component {
     return dateString
   }
 
-  getDates = (startDate, endDate) => {
-    const dateArray = new Array()
-    const firstDate = new Date(startDate)
-    let currentDate = new Date()
-    currentDate.setDate(firstDate.getDate() + 1)
-    const stopDate = new Date(endDate)
-    while (currentDate < stopDate) {
-      dateArray.push(new Date(currentDate).toISOString().slice(0, 10))
-      currentDate.setDate(currentDate.getDate() + 1)
+  onDayPress = (day) => {
+    const reservedDay = this.props.reservedDays.find(rd => rd.date === day.dateString)
+    if (reservedDay) {
+      const note = this.findNote(reservedDay)
+      console.log('note', note)
+      this.props.navigation.navigate('NoteView', { note })
     }
-    return dateArray
+  }
+
+  findNote = (reservedDay) => {
+    let note = null
+    if (reservedDay.startDate) {
+      note = this.props.userNotes.find(un => un.startDate === reservedDay.date)
+    } else if (reservedDay.endDate) {
+      note = this.props.userNotes.find(un => un.endDate === reservedDay.date)
+    } else {
+      let currentDate = new Date(reservedDay.date)
+      while (!note) {
+        currentDate.setDate(currentDate.getDate() + 1)
+        if (currentDate > new Date()) return
+        note = this.props.userNotes.find(un => {
+          const endDate = un.endDate.split('.').reverse().join('-')
+          const date = currentDate.toISOString().slice(0, 10)
+          return endDate === date
+        })
+      }
+    }
+    return note
   }
 
   render() {
@@ -89,6 +106,7 @@ class HomeScreen extends React.Component {
           maxDate={new Date()}
           markedDates={markedDates}
           markingType={'period'}
+          onDayPress={(day) => this.onDayPress(day)}
         />
       </View>
     )
