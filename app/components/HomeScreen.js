@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { initUserNotes } from '../reducers/noteReducer'
 import Notification from './Notification'
 import { CalendarList } from 'react-native-calendars'
+import { setLoader, hideLoader } from '../reducers/loaderReducer'
 
 class HomeScreen extends React.Component {
 
@@ -19,9 +20,11 @@ class HomeScreen extends React.Component {
   componentDidUpdate(prevProps) {
     const currentUser = this.props.auth.user
     if (currentUser !== prevProps.auth.user) {
-      this.setState({ currentUser })
-      console.log('user', currentUser)
-      this.props.initUserNotes(currentUser.uid)
+      if (currentUser) {
+        this.setState({ currentUser })
+        console.log('user', currentUser)
+        this.props.initUserNotes(currentUser.uid)
+      }
     }
   }
 
@@ -32,12 +35,10 @@ class HomeScreen extends React.Component {
     }
     string = string.slice(0, -2)
     string += '}'
-    console.log('st', string)
     return JSON.parse(string)
   }
 
   formulateDate = (note) => {
-    console.log('n', note)
     const startDate = note.startDate.split('.').reverse().join('-')
     const endDate = note.endDate.split('.').reverse().join('-')
 
@@ -56,7 +57,6 @@ class HomeScreen extends React.Component {
 
       dateString += startDateString + datesBetweenString + endDateString
     }
-    console.log('s', dateString)
     return dateString
   }
 
@@ -64,11 +64,11 @@ class HomeScreen extends React.Component {
     const dateArray = new Array()
     const firstDate = new Date(startDate)
     let currentDate = new Date()
-    currentDate.setDate(firstDate.getDate()+1)
+    currentDate.setDate(firstDate.getDate() + 1)
     const stopDate = new Date(endDate)
     while (currentDate < stopDate) {
-      dateArray.push(new Date(currentDate))
-      currentDate.setDate(currentDate.getDate()+1)
+      dateArray.push(new Date(currentDate).toISOString().slice(0, 10))
+      currentDate.setDate(currentDate.getDate() + 1)
     }
     return dateArray
   }
@@ -76,15 +76,11 @@ class HomeScreen extends React.Component {
   render() {
     const userNotes = this.props.userNotes
     console.log('notes', userNotes)
-    let markedDates = { '2018-09-19': { startingDay: true, color: 'green' },
-      '2018-09-20': { marked: true, color: 'green' },
-      '2018-09-21': { endingDay: true, color: 'green' }
-    }
+    let markedDates = null
     if (!userNotes) {
       return null
     } else {
       markedDates = this.convertToDates(userNotes)
-      console.log('md', markedDates)
     }
 
     return (
@@ -122,5 +118,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { initUserNotes }
+  { initUserNotes, setLoader, hideLoader }
 )(HomeScreen)

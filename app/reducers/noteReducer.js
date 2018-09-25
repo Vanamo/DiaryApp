@@ -35,7 +35,7 @@ export const initUserNotes = (userId) => {
         console.log(error.message)
       }
     })
-
+    dispatch({ type: 'HIDE_LOADER' })
   }
 }
 

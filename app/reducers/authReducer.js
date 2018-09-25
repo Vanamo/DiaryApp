@@ -77,6 +77,7 @@ export const login = (userData, successCB) => {
 
 export const setUser = (user) => {
   return (dispatch) => {
+    dispatch({ type: 'SET_LOADER' })
     authServices.getUser(user, function (success, data, error) {
       if (success) {
         if (data.exists) {
