@@ -41,7 +41,7 @@ export const register = (userData, successCB) => {
         })
         setTimeout(() => {
           dispatch({ type: 'HIDE_NOTIFICATION' })
-        }, 5000)  
+        }, 5000)
       }
     })
     dispatch({ type: 'HIDE_LOADER' })
@@ -68,7 +68,7 @@ export const login = (userData, successCB) => {
         })
         setTimeout(() => {
           dispatch({ type: 'HIDE_NOTIFICATION' })
-        }, 5000)        
+        }, 5000)
       }
       dispatch({ type: 'HIDE_LOADER' })
     })
@@ -77,7 +77,6 @@ export const login = (userData, successCB) => {
 
 export const setUser = (user) => {
   return (dispatch) => {
-    dispatch({ type: 'SET_LOADER' })
     authServices.getUser(user, function (success, data, error) {
       if (success) {
         if (data.exists) {
@@ -110,7 +109,7 @@ export const logout = (successCB, errorCB) => {
         })
         setTimeout(() => {
           dispatch({ type: 'HIDE_NOTIFICATION' })
-        }, 5000)        
+        }, 5000)
       }
     })
     dispatch({ type: 'HIDE_LOADER' })

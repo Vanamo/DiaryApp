@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { newNote } from '../reducers/noteReducer'
 import { newSuccessNotification, newErrorNotification } from '../reducers/notificationReducer'
+import { newReservedDay } from '../reducers/reservedDaysReducer'
 import EditNoteView from '../components/EditNoteView'
 
 
@@ -72,8 +73,36 @@ class NewNoteScreen extends React.Component {
         userId: this.props.auth.user.uid
       }
 
+      const firstDate = note.startDate.split('.').reverse().join('-')
+      const lastDate = note.endDate.split('.').reverse().join('-')
+      const reservedDays = this.getDates(firstDate, lastDate)
+
+      for (let i in reservedDays) {
+        const date = reservedDays[i]
+        const startDate = (date === firstDate)
+        const endDate = (date === lastDate)
+        const reservedDay = {
+          date,
+          userId: this.props.auth.user.uid,
+          startDate,
+          endDate
+        }
+        await this.props.newReservedDay(reservedDay)
+      }
+
       await this.props.newNote(note, this.onSuccess)
     }
+  }
+
+  getDates = (startDate, endDate) => {
+    const dateArray = new Array()
+    let currentDate = new Date(startDate)
+    const stopDate = new Date(endDate)
+    while (currentDate <= stopDate) {
+      dateArray.push(new Date(currentDate).toISOString().slice(0, 10))
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+    return dateArray
   }
 
   onSuccess = (note) => {
@@ -117,5 +146,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { newNote, newSuccessNotification, newErrorNotification }
+  { newNote, newSuccessNotification, newErrorNotification, newReservedDay }
 )(NewNoteScreen)

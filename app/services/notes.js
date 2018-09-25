@@ -2,13 +2,12 @@ import { db } from '../config/db'
 
 const create = (note, callback) => {
   const userId = note.userId
-  const newNoteRef = db.ref().child('notes').push()
+  const newNoteRef = db.ref().child('user-notes').push()
   const newNoteKey = newNoteRef.key
 
   const newNote = { ...note, id: newNoteKey }
 
   let updates = {}
-  updates['/notes/' + newNoteKey] = newNote
   updates['/user-notes/' + userId + '/' + newNoteKey] = newNote
 
   db.ref().update(updates)

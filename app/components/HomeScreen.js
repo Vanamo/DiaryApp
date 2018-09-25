@@ -1,10 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
-import { initUserNotes } from '../reducers/noteReducer'
 import Notification from './Notification'
 import { CalendarList } from 'react-native-calendars'
-import { setLoader, hideLoader } from '../reducers/loaderReducer'
 
 class HomeScreen extends React.Component {
 
@@ -23,39 +21,36 @@ class HomeScreen extends React.Component {
       if (currentUser) {
         this.setState({ currentUser })
         console.log('user', currentUser)
-        this.props.initUserNotes(currentUser.uid)
       }
     }
   }
 
-  convertToDates = (userNotes) => {
+  convertToDates = (reservedDays) => {
     let string = '{'
-    for (let i in userNotes) {
-      string += this.formulateDate(userNotes[i])
+    for (let i in reservedDays) {
+      string += this.formulateDate(reservedDays[i])
     }
-    string = string.slice(0, -2)
+    if (string.length > 1) {
+      string = string.slice(0, -2)
+    }
     string += '}'
     return JSON.parse(string)
   }
 
-  formulateDate = (note) => {
-    const startDate = note.startDate.split('.').reverse().join('-')
-    const endDate = note.endDate.split('.').reverse().join('-')
+  formulateDate = (day) => {
+    const color = '#9e9e9e'
+    const startDate = day.startDate
+    const endDate = day.endDate
 
     let dateString = ''
-    if (startDate === endDate) {
-      dateString += '\"' + startDate + '\": {\"startingDay\": true, \"color\":\"gray\", \"endingDay\": true}, '
+    if (startDate && endDate) {
+      dateString += '\"' + day.date + '\": {\"startingDay\": true, \"color\":\"' + color + '\", \"endingDay\": true}, '
+    } else if (startDate) {
+      dateString = '\"' + day.date + '\": {\"startingDay\": true, \"color\":\"' + color + '\"}, '
+    } else if (endDate) {
+      dateString = '\"' + day.date + '\": {\"endingDay\": true, \"color\":\"' + color + '\"}, '
     } else {
-      const startDateString = '\"' + startDate + '\": {\"startingDay\": true, \"color\":\"gray\"}, '
-      const endDateString = '\"' + endDate + '\": {\"endingDay\": true, \"color\":\"gray\"}, '
-
-      const datesBetween = this.getDates(startDate, endDate)
-      let datesBetweenString = ''
-      for (let i in datesBetween) {
-        datesBetweenString += '\"' + datesBetween[i] + '\": {\"marked\": true, \"color\":\"gray\"}, '
-      }
-
-      dateString += startDateString + datesBetweenString + endDateString
+      dateString += '\"' + day.date + '\": {\"marked\": true, \"color\":\"' + color + '\"}, '
     }
     return dateString
   }
@@ -74,13 +69,13 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    const userNotes = this.props.userNotes
-    console.log('notes', userNotes)
+    const reservedDays = this.props.reservedDays
+    console.log('rDays', reservedDays)
     let markedDates = null
-    if (!userNotes) {
+    if (!reservedDays) {
       return null
     } else {
-      markedDates = this.convertToDates(userNotes)
+      markedDates = this.convertToDates(reservedDays)
     }
 
     return (
@@ -112,11 +107,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
-    userNotes: state.userNotes
+    userNotes: state.userNotes,
+    reservedDays: state.reservedDays
   }
 }
 
 export default connect(
-  mapStateToProps,
-  { initUserNotes, setLoader, hideLoader }
+  mapStateToProps
 )(HomeScreen)
