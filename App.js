@@ -8,7 +8,7 @@ import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
 import HomeScreen from './app/components/HomeScreen'
 import NewNoteScreen from './app/components/NewNoteScreen'
 import EditNoteScreen from './app/components/EditNoteScreen'
-import NoteViewScreen from './app/components/NoteViewScreen'
+import NoteViewTabs from './app/components/NoteViewTabs'
 import SearchScreen from './app/components/SearchScreen'
 import SettingsScreen from './app/components/SettingsScreen'
 import AppHeader from './app/components/AppHeader'
@@ -17,13 +17,12 @@ import SignUpScreen from './app/components/SignUpScreen'
 import AuthLoadingScreen from './app/components/AuthLoadingScreen'
 import Loader from './app/utils/Loader'
 
-
 const AppStack = createStackNavigator(
   {
     Home: HomeScreen,
     NewNote: NewNoteScreen,
     EditNote: EditNoteScreen,
-    NoteView: NoteViewScreen,
+    NoteView: NoteViewTabs,
     Search: SearchScreen,
     Settings: SettingsScreen
   },

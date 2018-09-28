@@ -3,11 +3,13 @@ import { StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import Notification from './Notification'
 import { CalendarList } from 'react-native-calendars'
+import CustomButton from '../utils/CustomButton'
 
 class HomeScreen extends React.Component {
 
   state = {
-    currentUser: null
+    currentUser: null,
+    calendarView: true
   }
 
   componentDidMount() {
@@ -59,17 +61,21 @@ class HomeScreen extends React.Component {
     const reservedDay = this.props.reservedDays.find(rd => rd.date === day.dateString)
     if (reservedDay) {
       const note = this.findNote(reservedDay)
-      console.log('note', note)
-      this.props.navigation.navigate('NoteView', { note })
+      const index = this.props.userNotes.indexOf(note)
+      console.log('i', index)
+      console.log('nav', this.props.navigation)
+      this.props.navigation.navigate('NoteView')
     }
   }
 
   findNote = (reservedDay) => {
     let note = null
     if (reservedDay.startDate) {
-      note = this.props.userNotes.find(un => un.startDate === reservedDay.date)
+      note = this.props.userNotes.find(un =>
+        un.startDate.split('.').reverse().join('-') === reservedDay.date)
     } else if (reservedDay.endDate) {
-      note = this.props.userNotes.find(un => un.endDate === reservedDay.date)
+      note = this.props.userNotes.find(un =>
+        un.endDate.split('.').reverse().join('-') === reservedDay.date)
     } else {
       let currentDate = new Date(reservedDay.date)
       while (!note) {
@@ -85,6 +91,10 @@ class HomeScreen extends React.Component {
     return note
   }
 
+  toggleView = () => {
+    this.setState({ calendarView: !this.state.calendarView })
+  }
+
   render() {
     const reservedDays = this.props.reservedDays
     console.log('rDays', reservedDays)
@@ -95,19 +105,27 @@ class HomeScreen extends React.Component {
       markedDates = this.convertToDates(reservedDays)
     }
 
+    const buttonTitle = this.state.calendarView ? 'Selailunäkymä' : 'Kalenterinäkymä'
+
     return (
-      <View style={styles.container}>
-        <View style={{ height: 100 }}>
+      <View style={{ flex: 1 }}>
+        <View style={styles.buttonContainer}>
           <Notification />
+          <CustomButton
+            onPress={this.toggleView}
+            title1={buttonTitle}
+          />
         </View>
-        <CalendarList
-          horizontal={true}
-          pagingEnabled={true}
-          maxDate={new Date()}
-          markedDates={markedDates}
-          markingType={'period'}
-          onDayPress={(day) => this.onDayPress(day)}
-        />
+        <View style={styles.container}>
+          <CalendarList
+            horizontal={true}
+            pagingEnabled={true}
+            maxDate={new Date()}
+            markedDates={markedDates}
+            markingType={'period'}
+            onDayPress={(day) => this.onDayPress(day)}
+          />
+        </View>
       </View>
     )
   }
@@ -118,6 +136,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'white'
+  },
+  buttonContainer: {
+    height: 100,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     backgroundColor: 'white'
   }
 })

@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#9e9e9e',
     borderRadius: 4,
     padding: 10,
-    marginLeft: 13
+    marginLeft: 13,
+    marginRight: 13
   },
   wideButton: {
     alignItems: 'center',

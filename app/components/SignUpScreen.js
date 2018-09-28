@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 8,
-    marginLeft: 13
+    marginLeft: 13,
+    marginRight: 13
   }
 })
 
