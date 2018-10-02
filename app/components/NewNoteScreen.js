@@ -4,6 +4,7 @@ import { newNote } from '../reducers/noteReducer'
 import { newSuccessNotification, newErrorNotification } from '../reducers/notificationReducer'
 import { newReservedDay } from '../reducers/reservedDaysReducer'
 import EditNoteView from '../components/EditNoteView'
+import { CameraRoll } from 'react-native'
 
 
 class NewNoteScreen extends React.Component {
@@ -13,12 +14,19 @@ class NewNoteScreen extends React.Component {
     endDate: null,
     content: [],
     showContent: false,
-    textInputs: []
+    textInputs: [],
+    photos: [],
+    choosablePhotos: null,
+    modalOpen: false
+  }
+
+  getId = () => {
+    return Math.random().toString(36).substr(2, 16)
   }
 
   addTextInput = () => {
     const content = this.state.content
-    const id = Math.random().toString(36).substr(2, 16)
+    const id = this.getId()
     content.push({ type: 'text', id })
     const textInputs = this.state.textInputs
     textInputs.push({ id, text: '' })
@@ -29,8 +37,33 @@ class NewNoteScreen extends React.Component {
     })
   }
 
-  addPicture = () => {
+  addPicture = async () => {
+    const cameraRoll = await CameraRoll.getPhotos({
+      first: 50
+    })
+    this.setState({
+      choosablePhotos: cameraRoll.edges,
+      modalOpen: true
+    })
+  }
 
+  hideModal = () => {
+    this.setState({ modalOpen: !this.state.modalOpen })
+  }
+
+  onPressPhoto = (photo) => {
+    this.hideModal()
+    console.log('photo', photo)
+    const id = Math.random().toString(36).substr(2, 16)
+    const content = this.state.content
+    content.push({ type: 'picture', id })
+    const photos = this.state.photos
+    photos.push({ id, photo })
+    this.setState({
+      content,
+      photos,
+      showContent: true
+    })
   }
 
   resetDates = () => {
@@ -148,6 +181,9 @@ class NewNoteScreen extends React.Component {
         endDate={this.state.endDate}
         content={this.state.content}
         textInputs={this.state.textInputs}
+        photos={this.state.photos}
+        choosablePhotos={this.state.choosablePhotos}
+        modalOpen={this.state.modalOpen}
         onStartDateChange={this.onStartDateChange}
         onEndDateChange={this.onEndDateChange}
         resetDates={this.resetDates}
@@ -156,6 +192,8 @@ class NewNoteScreen extends React.Component {
         addTextInput={this.addTextInput}
         addPicture={this.addPicture}
         save={this.save}
+        hideModal={this.hideModal}
+        onPressPhoto={this.onPressPhoto}
       />
     )
   }

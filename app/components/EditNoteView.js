@@ -1,10 +1,11 @@
 import React from 'react'
 import DatePicker from 'react-native-datepicker'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { Image, StyleSheet, TextInput, View } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
 import RemoveIcon from '../utils/RemoveIcon'
 import Notification from '../components/Notification'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import PhotoModal from './PhotoModal'
 
 const EditNoteView = ({
   showContent,
@@ -12,6 +13,9 @@ const EditNoteView = ({
   endDate,
   content,
   textInputs,
+  photos,
+  choosablePhotos,
+  modalOpen,
   onStartDateChange,
   onEndDateChange,
   resetDates,
@@ -19,7 +23,8 @@ const EditNoteView = ({
   removeTextInput,
   addTextInput,
   addPicture,
-  save
+  save,
+  onPressPhoto
 }) => {
 
   let saveButton = null
@@ -35,6 +40,15 @@ const EditNoteView = ({
         onPress={save}
       />
     )
+  }
+
+  let modal = null
+  if (modalOpen && choosablePhotos) {
+    modal = <PhotoModal
+      photos={choosablePhotos}
+      visible={modalOpen}
+      onPressPhoto={onPressPhoto}
+    />
   }
 
   return (
@@ -101,6 +115,21 @@ const EditNoteView = ({
                 />
               </View>
             )
+          } else if (c.type === 'picture') {
+            const uri = photos.find(p => p.id === c.id).photo.node.image.uri
+            return (
+              <View
+                key={c.id}
+              >
+                <Image
+                  style={{ width: 300, height: 300 }}
+                  source={{ uri }}
+                />
+                <RemoveIcon
+                  onPress={() => removeTextInput(c.id)}
+                />
+              </View>
+            )
           }
         })}
 
@@ -131,6 +160,7 @@ const EditNoteView = ({
           {saveButton}
         </View>
 
+        {modal}
       </View>
     </KeyboardAwareScrollView>
   )

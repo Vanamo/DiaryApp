@@ -5,6 +5,7 @@ import { View } from 'react-native'
 import { Font } from 'expo'
 import store from './app/store'
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation'
+import { Permissions } from 'expo'
 import HomeScreen from './app/components/HomeScreen'
 import NewNoteScreen from './app/components/NewNoteScreen'
 import EditNoteScreen from './app/components/EditNoteScreen'
@@ -88,6 +89,14 @@ export default class App extends React.Component {
       'caveat-bold': require('./assets/fonts/Caveat-Bold.ttf')
     })
     this.setState({ fontLoaded: true })
+    this.askCameraPermissions()
+  }
+
+  askCameraPermissions = async () => {
+    const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
+    if (status !== 'granted') {
+      await Permissions.askAsync(Permissions.CAMERA_ROLL)
+    }
   }
 
   render() {
