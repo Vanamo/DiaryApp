@@ -8,8 +8,6 @@ const reducer = (state = null, action) => {
       } else {
         return []
       }
-    case 'NEW_NOTE':
-      return [...state, action.data]
     case 'UPDATE_NOTE': {
       const changedNote = action.data
       const id = changedNote.id
@@ -43,10 +41,6 @@ export const newNote = (noteObject, successCB) => {
     dispatch({ type: 'SET_LOADER' })
     noteService.create(noteObject, function (success, data, error) {
       if (success) {
-        dispatch({
-          type: 'NEW_NOTE',
-          data
-        })
         dispatch({
           type: 'SUCCESS',
           message: 'Muistiinpano on tallennettu',

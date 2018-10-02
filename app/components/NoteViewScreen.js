@@ -3,8 +3,8 @@ import { StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../utils/CustomButton'
 
 class NoteViewScreen extends React.Component {
+
   render() {
-    console.log('nav', this.props.navigation)
     const note = this.props.note
 
     let date = note.startDate

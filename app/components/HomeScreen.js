@@ -3,13 +3,12 @@ import { StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import Notification from './Notification'
 import { CalendarList } from 'react-native-calendars'
-import CustomButton from '../utils/CustomButton'
+import { setInitialTab } from '../reducers/tabReducer'
 
 class HomeScreen extends React.Component {
 
   state = {
-    currentUser: null,
-    calendarView: true
+    currentUser: null
   }
 
   componentDidMount() {
@@ -57,13 +56,14 @@ class HomeScreen extends React.Component {
     return dateString
   }
 
-  onDayPress = (day) => {
+  onDayPress = async (day) => {
     const reservedDay = this.props.reservedDays.find(rd => rd.date === day.dateString)
     if (reservedDay) {
       const note = this.findNote(reservedDay)
       const index = this.props.userNotes.indexOf(note)
       console.log('i', index)
       console.log('nav', this.props.navigation)
+      await this.props.setInitialTab(index)
       this.props.navigation.navigate('NoteView')
     }
   }
@@ -91,10 +91,6 @@ class HomeScreen extends React.Component {
     return note
   }
 
-  toggleView = () => {
-    this.setState({ calendarView: !this.state.calendarView })
-  }
-
   render() {
     const reservedDays = this.props.reservedDays
     console.log('rDays', reservedDays)
@@ -105,16 +101,10 @@ class HomeScreen extends React.Component {
       markedDates = this.convertToDates(reservedDays)
     }
 
-    const buttonTitle = this.state.calendarView ? 'Selailunäkymä' : 'Kalenterinäkymä'
-
     return (
       <View style={{ flex: 1 }}>
-        <View style={styles.buttonContainer}>
+        <View style={styles.messageContainer}>
           <Notification />
-          <CustomButton
-            onPress={this.toggleView}
-            title1={buttonTitle}
-          />
         </View>
         <View style={styles.container}>
           <CalendarList
@@ -138,8 +128,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white'
   },
-  buttonContainer: {
-    height: 100,
+  messageContainer: {
+    height: 70,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -156,5 +146,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  { setInitialTab }
 )(HomeScreen)

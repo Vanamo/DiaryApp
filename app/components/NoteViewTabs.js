@@ -6,30 +6,41 @@ import NoteViewScreen from './NoteViewScreen'
 class NoteViewTabs extends React.Component {
 
   render() {
-
     const tabs = this.props.userNotes.reduce((acc, val, i) => {
-    acc[`Note${i}`] = { screen: props => <NoteViewScreen note={val}/> }
-      return acc
-    }, {}) 
-    
-    console.log('tabs', tabs)
-
-    const NoteViewTabs = createMaterialTopTabNavigator(tabs, {
-      swipeEnabled: true,
-      navigationOptions: {
-        tabBarVisible: false
+      acc[`Note${i}`] = {
+        screen: props =>
+          <NoteViewScreen
+            note={val}
+            navigation={this.props.navigation}
+          />
       }
-    })
+      return acc
+    }, {})
+
+    const initialRouteName = `Note${this.props.initialTab}`
+    console.log('tabs', tabs, initialRouteName)
+
+    const NoteViewTabs = createMaterialTopTabNavigator(
+      tabs,
+      {
+        swipeEnabled: true,
+        initialRouteName,
+        navigationOptions: {
+          tabBarVisible: false
+        }
+      }
+    )
     console.log('uN', this.props.userNotes)
     return (
-      <NoteViewTabs/>
+      <NoteViewTabs />
     )
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    userNotes: state.userNotes
+    userNotes: state.userNotes,
+    initialTab: state.initialTab
   }
 }
 
