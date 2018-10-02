@@ -1,6 +1,6 @@
 import React from 'react'
 import DatePicker from 'react-native-datepicker'
-import { Image, StyleSheet, TextInput, View } from 'react-native'
+import { Alert, Image, StyleSheet, TextInput, View } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
 import RemoveIcon from '../utils/RemoveIcon'
 import Notification from '../components/Notification'
@@ -20,7 +20,7 @@ const EditNoteView = ({
   onEndDateChange,
   resetDates,
   changeTextInput,
-  removeTextInput,
+  removeInput,
   addTextInput,
   addPicture,
   save,
@@ -51,10 +51,23 @@ const EditNoteView = ({
     />
   }
 
+  askFirst = (text, removeFunction) => {
+    Alert.alert(
+      'Info',
+      `Haluatko varmasti poistaa ${text}?`,
+      [
+        {text: 'Peruuta', onPress: () => console.log('cancel')},
+        {text: 'OK', onPress: () => removeFunction()}
+      ],
+      { cancelable: false }
+    )
+  }
+
   return (
     <KeyboardAwareScrollView
       keyboardShouldPersistTaps='handled'
       enableOnAndroid={true}
+      extraScrollHeight={100}
     >
       <View>
         <View style={styles.dateContainer}>
@@ -96,10 +109,12 @@ const EditNoteView = ({
 
         {content.map(c => {
           if (c.type === 'text') {
+            console.log('ti', textInputs)
+            const removeFunction = () => removeInput(c.id, 'textInputs')
             return (
               <View
                 key={c.id}
-                style={styles.textInputContainer}>
+                style={styles.inputContainer}>
                 <TextInput
                   style={styles.textInput}
                   autoCapitalize='sentences'
@@ -110,23 +125,26 @@ const EditNoteView = ({
                   underlineColorAndroid='transparent'
                 />
                 <RemoveIcon
-                  onPress={() => removeTextInput(c.id)}
+                  onPress={() => this.askFirst('tekstikentän', removeFunction)}
                   disabled={textInputs.find(t => t.id === c.id).text.length}
                 />
               </View>
             )
           } else if (c.type === 'picture') {
+            console.log('ps', photos)
             const uri = photos.find(p => p.id === c.id).photo.node.image.uri
+            const removeFunction = () => removeInput(c.id, 'photos')
             return (
               <View
                 key={c.id}
+                style={ styles.inputContainer }
               >
                 <Image
-                  style={{ width: 300, height: 300 }}
+                  style={ styles.image }
                   source={{ uri }}
                 />
                 <RemoveIcon
-                  onPress={() => removeTextInput(c.id)}
+                  onPress={() => this.askFirst('kuvan', removeFunction)}
                 />
               </View>
             )
@@ -176,6 +194,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginLeft: 0,
+    marginTop: 20,
     height: 70,
     width: 320,
     display: 'flex',
@@ -183,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-  textInputContainer: {
+  inputContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -194,13 +213,21 @@ const styles = StyleSheet.create({
     width: 290,
     borderColor: '#9e9e9e',
     borderWidth: 1,
-    marginTop: 8,
+    marginTop: 15,
     marginLeft: 15
   },
   saveButtonContainer: {
     marginTop: 30,
     marginBottom: 20,
     width: 320
+  },
+  image: {
+    height: 290,
+    width: 290,
+    marginLeft: 15,
+    marginTop: 15,
+    borderColor: '#9e9e9e',
+    borderWidth: 1,
   }
 })
 

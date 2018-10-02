@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../utils/CustomButton'
 
 class NoteViewScreen extends React.Component {
@@ -12,24 +12,38 @@ class NoteViewScreen extends React.Component {
       date = date + '–' + note.endDate
     }
     return (
-      <View style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }}>
         <View style={styles.noteBackground}>
           <Text style={styles.text}>{date}</Text>
           <View style={{ height: 10 }} />
-          {note.textInputs.map((t, ind) => (
-            <Text
-              style={styles.text}
-              key={ind}
-            >
-              {t.text}
-            </Text>
-          ))}
+          {note.content.map((c) => {
+            if (c.type === 'text') {
+              const text = note.textInputs.find(t => t.id === c.id).text
+              return (
+                <Text
+                  style={styles.text}
+                  key={c.id}
+                >
+                  {text}
+                </Text>
+              )
+            } else if (c.type === 'picture') {
+              const uri = note.photos.find(p => p.id === c.id).photo.node.image.uri
+              return (
+                <Image
+                  style={styles.image}
+                  key={c.id}
+                  source={{ uri }}
+                />
+              )
+            }
+          })}
         </View>
         <CustomButton
           onPress={() => this.props.navigation.navigate('EditNote', { note })}
           title1='Muokkaa'
         />
-      </View>
+      </ScrollView>
     )
   }
 }
@@ -48,6 +62,14 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'caveat-regular',
     fontSize: 20
+  },
+  image: {
+    height: 290,
+    width: 290,
+    marginLeft: 15,
+    marginTop: 15,
+    borderColor: '#9e9e9e',
+    borderWidth: 1,
   }
 })
 

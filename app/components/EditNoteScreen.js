@@ -4,6 +4,7 @@ import { updateNote } from '../reducers/noteReducer'
 import { newErrorNotification, newSuccessNotification } from '../reducers/notificationReducer'
 import { newReservedDay, deleteReservedDay } from '../reducers/reservedDaysReducer'
 import EditNoteView from '../components/EditNoteView'
+import { CameraRoll } from 'react-native'
 
 class EditNoteScreen extends React.Component {
 
@@ -13,6 +14,9 @@ class EditNoteScreen extends React.Component {
     content: [],
     showContent: false,
     textInputs: [],
+    photos: [],
+    choosablePhotos: null,
+    modalOpen: false,
     prevStartDate: null,
     prevEndDate: null
   }
@@ -26,15 +30,20 @@ class EditNoteScreen extends React.Component {
         content: note.content,
         showContent: true,
         textInputs: note.textInputs,
+        photos: note.photos,
         prevStartDate: note.startDate,
         prevEndDate: note.endDate
       })
     }
   }
 
+  getId = () => {
+    return Math.random().toString(36).substr(2, 16)
+  }
+
   addTextInput = () => {
     const content = this.state.content
-    const id = Math.random().toString(36).substr(2, 16)
+    const id = this.getId()
     content.push({ type: 'text', id })
     const textInputs = this.state.textInputs
     textInputs.push({ id, text: '' })
@@ -45,8 +54,33 @@ class EditNoteScreen extends React.Component {
     })
   }
 
-  addPicture = () => {
+  addPicture = async () => {
+    const cameraRoll = await CameraRoll.getPhotos({
+      first: 50
+    })
+    this.setState({
+      choosablePhotos: cameraRoll.edges,
+      modalOpen: true
+    })
+  }
 
+  hideModal = () => {
+    this.setState({ modalOpen: !this.state.modalOpen })
+  }
+
+  onPressPhoto = (photo) => {
+    this.hideModal()
+    console.log('photo', photo)
+    const id = this.getId()
+    const content = this.state.content
+    content.push({ type: 'picture', id })
+    const photos = this.state.photos
+    photos.push({ id, photo })
+    this.setState({
+      content,
+      photos,
+      showContent: true
+    })
   }
 
   resetDates = () => {
@@ -61,20 +95,23 @@ class EditNoteScreen extends React.Component {
     this.setState({ textInputs })
   }
 
-  removeTextInput = (id) => {
-    if (!this.state.textInputs.find(t => t.id === id).text.length) {
-      const content = this.state.content.filter(c => c.id !== id)
-      const textInputs = this.state.textInputs.filter(t => t.id !== id)
-      let showContent = true
-      if (!content.length) {
-        showContent = false
-      }
-      this.setState({
-        content,
-        textInputs,
-        showContent
-      })
+  removeInput = (id, group) => {
+    //If there is text in textInput do not remove it
+    if (group === 'textInputs' && this.state.textInputs.find(t => t.id === id).text.length) {
+      return
     }
+
+    const content = this.state.content.filter(c => c.id !== id)
+    const inputs = this.state[group].filter(i => i.id !== id)
+    let showContent = true
+    if (!content.length) {
+      showContent = false
+    }
+    this.setState({
+      content,
+      [group]: inputs,
+      showContent
+    })
   }
 
   save = async () => {
@@ -89,6 +126,7 @@ class EditNoteScreen extends React.Component {
       endDate: this.state.endDate || this.state.startDate,
       content: this.state.content,
       textInputs: this.state.textInputs,
+      photos: this.state.photos,
       userId: this.props.auth.user.uid
     }
 
@@ -187,14 +225,19 @@ class EditNoteScreen extends React.Component {
         endDate={this.state.endDate}
         content={this.state.content}
         textInputs={this.state.textInputs}
+        photos={this.state.photos}
+        choosablePhotos={this.state.choosablePhotos}
+        modalOpen={this.state.modalOpen}
         onStartDateChange={this.onStartDateChange}
         onEndDateChange={this.onEndDateChange}
         resetDates={this.resetDates}
         changeTextInput={this.changeTextInput}
-        removeTextInput={this.removeTextInput}
+        removeInput={this.removeInput}
         addTextInput={this.addTextInput}
         addPicture={this.addPicture}
         save={this.save}
+        hideModal={this.hideModal}
+        onPressPhoto={this.onPressPhoto}
       />
     )
   }
@@ -209,6 +252,8 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  { updateNote, newErrorNotification, newSuccessNotification,
-    newReservedDay, deleteReservedDay }
+  {
+    updateNote, newErrorNotification, newSuccessNotification,
+    newReservedDay, deleteReservedDay
+  }
 )(EditNoteScreen)

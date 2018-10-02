@@ -54,7 +54,7 @@ class NewNoteScreen extends React.Component {
   onPressPhoto = (photo) => {
     this.hideModal()
     console.log('photo', photo)
-    const id = Math.random().toString(36).substr(2, 16)
+    const id = this.getId()
     const content = this.state.content
     content.push({ type: 'picture', id })
     const photos = this.state.photos
@@ -78,20 +78,23 @@ class NewNoteScreen extends React.Component {
     this.setState({ textInputs })
   }
 
-  removeTextInput = (id) => {
-    if (!this.state.textInputs.find(t => t.id === id).text.length) {
-      const content = this.state.content.filter(c => c.id !== id)
-      const textInputs = this.state.textInputs.filter(t => t.id !== id)
-      let showContent = true
-      if (!content.length) {
-        showContent = false
-      }
-      this.setState({
-        content,
-        textInputs,
-        showContent
-      })
+  removeInput = (id, group) => {
+    //If there is text in textInput do not remove it
+    if (group === 'textInputs' && this.state.textInputs.find(t => t.id === id).text.length) {
+      return
     }
+
+    const content = this.state.content.filter(c => c.id !== id)
+    const inputs = this.state[group].filter(i => i.id !== id)
+    let showContent = true
+    if (!content.length) {
+      showContent = false
+    }
+    this.setState({
+      content,
+      [group]: inputs,
+      showContent
+    })
   }
 
   save = async () => {
@@ -105,6 +108,7 @@ class NewNoteScreen extends React.Component {
       endDate: this.state.endDate || this.state.startDate,
       content: this.state.content,
       textInputs: this.state.textInputs,
+      photos: this.state.photos,
       userId: this.props.auth.user.uid
     }
 
@@ -188,7 +192,7 @@ class NewNoteScreen extends React.Component {
         onEndDateChange={this.onEndDateChange}
         resetDates={this.resetDates}
         changeTextInput={this.changeTextInput}
-        removeTextInput={this.removeTextInput}
+        removeInput={this.removeInput}
         addTextInput={this.addTextInput}
         addPicture={this.addPicture}
         save={this.save}
