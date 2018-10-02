@@ -29,11 +29,19 @@ class EditNoteScreen extends React.Component {
         endDate: note.endDate,
         content: note.content,
         showContent: true,
-        textInputs: note.textInputs,
-        photos: note.photos,
         prevStartDate: note.startDate,
         prevEndDate: note.endDate
       })
+      if (note.textInputs) {
+        this.setState({
+          textInputs: note.textInputs
+        })
+      }
+      if (note.photos) {
+        this.setState({
+          photos: note.photos
+        })
+      }
     }
   }
 

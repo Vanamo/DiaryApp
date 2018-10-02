@@ -58,13 +58,26 @@ class HomeScreen extends React.Component {
 
   onDayPress = async (day) => {
     const reservedDay = this.props.reservedDays.find(rd => rd.date === day.dateString)
+    const userNotes = this.props.userNotes.sort(this.sortByStartDate)
     if (reservedDay) {
       const note = this.findNote(reservedDay)
-      const index = this.props.userNotes.indexOf(note)
+      const index = userNotes.indexOf(note)
       console.log('i', index)
       console.log('nav', this.props.navigation)
       await this.props.setInitialTab(index)
       this.props.navigation.navigate('NoteView')
+    }
+  }
+
+  sortByStartDate = (a, b) => {
+    const d1 = new Date(a.startDate.split('.').reverse().join('-'))
+    const d2 = new Date(b.startDate.split('.').reverse().join('-'))
+    if (d1 < d2) {
+      return -1
+    } else if (d1 > d2) {
+      return 1
+    } else {
+      return 0
     }
   }
 
