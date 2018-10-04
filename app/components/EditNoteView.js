@@ -27,18 +27,29 @@ const EditNoteView = ({
   onPressPhoto
 }) => {
 
-  let saveButton = null
+  let saveButtons = null
   if (showContent) {
-    saveButton = (
-      <Button
-        title='Tallenna '
-        fontFamily='caveat-regular'
-        fontSize={17}
-        borderRadius={4}
-        backgroundColor='#9e9e9e'
-        icon={{ name: 'save', type: 'font-awesome' }}
-        onPress={save}
-      />
+    saveButtons = (
+      <View>
+        <Button
+          title='Tallenna ja jatka muokkausta '
+          fontFamily='caveat-regular'
+          fontSize={17}
+          borderRadius={4}
+          backgroundColor='#9e9e9e'
+          icon={{ name: 'save', type: 'font-awesome' }}
+          onPress={() => save(false)}
+        />
+        <Button
+          title='Tallenna ja valmis '
+          fontFamily='caveat-regular'
+          fontSize={17}
+          borderRadius={4}
+          backgroundColor='#9e9e9e'
+          icon={{ name: 'save', type: 'font-awesome' }}
+          onPress={() => save(true)}
+        />
+      </View>
     )
   }
 
@@ -56,8 +67,8 @@ const EditNoteView = ({
       'Info',
       `Haluatko varmasti poistaa ${text}?`,
       [
-        {text: 'Peruuta', onPress: () => console.log('cancel')},
-        {text: 'OK', onPress: () => removeFunction()}
+        { text: 'Peruuta', onPress: () => console.log('cancel') },
+        { text: 'OK', onPress: () => removeFunction() }
       ],
       { cancelable: false }
     )
@@ -137,10 +148,10 @@ const EditNoteView = ({
             return (
               <View
                 key={c.id}
-                style={ styles.inputContainer }
+                style={styles.inputContainer}
               >
                 <Image
-                  style={ styles.image }
+                  style={styles.image}
                   source={{ uri }}
                 />
                 <RemoveIcon
@@ -175,7 +186,7 @@ const EditNoteView = ({
         <Notification />
 
         <View style={styles.saveButtonContainer}>
-          {saveButton}
+          {saveButtons}
         </View>
 
         {modal}

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { newNote } from '../reducers/noteReducer'
 import { newSuccessNotification, newErrorNotification } from '../reducers/notificationReducer'
 import { newReservedDay } from '../reducers/reservedDaysReducer'
+import { setInitialTab } from '../reducers/tabReducer'
 import EditNoteView from '../components/EditNoteView'
 import { CameraRoll } from 'react-native'
 
@@ -97,7 +98,7 @@ class NewNoteScreen extends React.Component {
     })
   }
 
-  save = async () => {
+  save = async (done) => {
     if (!this.state.startDate) {
       this.props.newErrorNotification('Valitse alkupäivä', 5)
       return
@@ -143,6 +144,18 @@ class NewNoteScreen extends React.Component {
     }
 
     await this.props.newNote(note, this.onSuccess)
+    this.moveAfterDone(note, done)
+  }
+
+  moveAfterDone = async (note, done) => {
+    if (done) {
+      const updatedNote = this.props.userNotes.find(un => un.startDate === note.startDate)
+      const index = this.props.userNotes.indexOf(updatedNote)
+      console.log('up', updatedNote, index)
+
+      await this.props.setInitialTab(index)
+      this.props.navigation.navigate('NoteView')
+    }
   }
 
   checkDates = (dateArray) => {
@@ -196,7 +209,6 @@ class NewNoteScreen extends React.Component {
         addTextInput={this.addTextInput}
         addPicture={this.addPicture}
         save={this.save}
-        hideModal={this.hideModal}
         onPressPhoto={this.onPressPhoto}
       />
     )
@@ -206,11 +218,13 @@ class NewNoteScreen extends React.Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
-    reservedDays: state.reservedDays
+    reservedDays: state.reservedDays,
+    userNotes: state.userNotes
   }
 }
 
 export default connect(
   mapStateToProps,
-  { newNote, newSuccessNotification, newErrorNotification, newReservedDay }
+  { newNote, newSuccessNotification, newErrorNotification, newReservedDay,
+    setInitialTab }
 )(NewNoteScreen)

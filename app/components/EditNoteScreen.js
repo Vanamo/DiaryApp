@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { updateNote } from '../reducers/noteReducer'
 import { newErrorNotification, newSuccessNotification } from '../reducers/notificationReducer'
 import { newReservedDay, deleteReservedDay } from '../reducers/reservedDaysReducer'
+import { setInitialTab } from '../reducers/tabReducer'
 import EditNoteView from '../components/EditNoteView'
 import { CameraRoll } from 'react-native'
 
@@ -122,7 +123,7 @@ class EditNoteScreen extends React.Component {
     })
   }
 
-  save = async () => {
+  save = async (done) => {
     if (!this.state.startDate) {
       this.props.newErrorNotification('Valitse alkupäivä', 5)
       return
@@ -143,6 +144,7 @@ class EditNoteScreen extends React.Component {
 
     if (oldStartDate === note.startDate && oldEndDate === note.endDate) {
       await this.props.updateNote(note)
+      this.moveAfterDone(note, done)
       return
     }
 
@@ -195,6 +197,19 @@ class EditNoteScreen extends React.Component {
       prevStartDate: note.startDate,
       prevEndDate: note.endDate
     })
+
+    this.moveAfterDone(note, true)
+  }
+
+  moveAfterDone = async (note, done) => {
+    if (done) {
+      const updatedNote = this.props.userNotes.find(un => un.startDate === note.startDate)
+      const index = this.props.userNotes.indexOf(updatedNote)
+      console.log('up', updatedNote, index)
+
+      await this.props.setInitialTab(index)
+      this.props.navigation.navigate('NoteView')
+    }
   }
 
   checkDates = (dateArray) => {
@@ -244,7 +259,6 @@ class EditNoteScreen extends React.Component {
         addTextInput={this.addTextInput}
         addPicture={this.addPicture}
         save={this.save}
-        hideModal={this.hideModal}
         onPressPhoto={this.onPressPhoto}
       />
     )
@@ -254,7 +268,8 @@ class EditNoteScreen extends React.Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
-    reservedDays: state.reservedDays
+    reservedDays: state.reservedDays,
+    userNotes: state.userNotes
   }
 }
 
@@ -262,6 +277,6 @@ export default connect(
   mapStateToProps,
   {
     updateNote, newErrorNotification, newSuccessNotification,
-    newReservedDay, deleteReservedDay
+    newReservedDay, deleteReservedDay, setInitialTab
   }
 )(EditNoteScreen)

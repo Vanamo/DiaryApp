@@ -12,7 +12,7 @@ class NoteViewScreen extends React.Component {
       date = date + '–' + note.endDate
     }
     return (
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView>
         <View style={styles.noteBackground}>
           <Text style={styles.text}>{date}</Text>
           <View style={{ height: 10 }} />
@@ -53,22 +53,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#bfbfbf',
     borderWidth: 1,
     borderColor: 'grey',
+    padding: 13,
     margin: 13,
-    padding: 10,
-    display: 'flex',
-    justifyContent: 'flex-start',
     minHeight: 200
   },
   text: {
+    display: 'flex',
+    alignItems: 'flex-start',
     fontFamily: 'caveat-regular',
-    fontSize: 20
+    fontSize: 20,
+    marginBottom: 15
   },
   image: {
-    height: 290,
-    width: 290,
-    marginLeft: 15,
-    marginTop: 15,
-    borderColor: '#9e9e9e',
+    display: 'flex',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: '100%',
+    height: 250,
+    marginBottom: 15,
+    borderColor: 'grey',
     borderWidth: 1,
   }
 })
