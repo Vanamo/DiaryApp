@@ -40,7 +40,10 @@ class NoteViewScreen extends React.Component {
           })}
         </View>
         <CustomButton
-          onPress={() => this.props.navigation.navigate('EditNote', { note })}
+          onPress={() => {
+            this.props.navigation.navigate('EditNote', { note })
+            console.log('täällä')
+          }}
           title1='Muokkaa'
         />
       </ScrollView>

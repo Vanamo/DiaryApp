@@ -143,19 +143,33 @@ class NewNoteScreen extends React.Component {
       await this.props.newReservedDay(reservedDay)
     }
 
-    await this.props.newNote(note, this.onSuccess)
-    this.moveAfterDone(note, done)
+    await this.props.newNote(note)
+
+    if (!done) {
+      this.props.navigation.navigate('EditNote', { note })
+    } else {
+      this.moveAfterDone(note)
+    }
+
+    this.setState({
+      startDate: null,
+      endDate: null,
+      content: [],
+      showContent: false,
+      textInputs: [],
+      photos: [],
+      choosablePhotos: null,
+      modalOpen: false
+    })
   }
 
-  moveAfterDone = async (note, done) => {
-    if (done) {
-      const updatedNote = this.props.userNotes.find(un => un.startDate === note.startDate)
-      const index = this.props.userNotes.indexOf(updatedNote)
-      console.log('up', updatedNote, index)
+  moveAfterDone = async (note) => {
+    const updatedNote = this.props.userNotes.find(un => un.startDate === note.startDate)
+    const index = this.props.userNotes.indexOf(updatedNote)
+    console.log('up', updatedNote, index)
 
-      await this.props.setInitialTab(index)
-      this.props.navigation.navigate('NoteView')
-    }
+    await this.props.setInitialTab(index)
+    this.props.navigation.navigate('NoteView')
   }
 
   checkDates = (dateArray) => {
@@ -176,10 +190,6 @@ class NewNoteScreen extends React.Component {
       currentDate.setDate(currentDate.getDate() + 1)
     }
     return dateArray
-  }
-
-  onSuccess = (note) => {
-    this.props.navigation.navigate('EditNote', { note })
   }
 
   onStartDateChange = (date) => {
@@ -215,16 +225,30 @@ class NewNoteScreen extends React.Component {
   }
 }
 
+const sortByStartDate = (a, b) => {
+  const d1 = new Date(a.startDate.split('.').reverse().join('-'))
+  const d2 = new Date(b.startDate.split('.').reverse().join('-'))
+  if (d1 < d2) {
+    return -1
+  } else if (d1 > d2) {
+    return 1
+  } else {
+    return 0
+  }
+}
+
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     reservedDays: state.reservedDays,
-    userNotes: state.userNotes
+    userNotes: state.userNotes.sort(sortByStartDate)
   }
 }
 
 export default connect(
   mapStateToProps,
-  { newNote, newSuccessNotification, newErrorNotification, newReservedDay,
-    setInitialTab }
+  {
+    newNote, newSuccessNotification, newErrorNotification, newReservedDay,
+    setInitialTab
+  }
 )(NewNoteScreen)

@@ -40,6 +40,7 @@ const EditNoteView = ({
           icon={{ name: 'save', type: 'font-awesome' }}
           onPress={() => save(false)}
         />
+        <View style={{ marginTop: 10 }}/>
         <Button
           title='Tallenna ja valmis '
           fontFamily='caveat-regular'
@@ -120,7 +121,6 @@ const EditNoteView = ({
 
         {content.map(c => {
           if (c.type === 'text') {
-            console.log('ti', textInputs)
             const removeFunction = () => removeInput(c.id, 'textInputs')
             return (
               <View
@@ -142,7 +142,6 @@ const EditNoteView = ({
               </View>
             )
           } else if (c.type === 'picture') {
-            console.log('ps', photos)
             const uri = photos.find(p => p.id === c.id).photo.node.image.uri
             const removeFunction = () => removeInput(c.id, 'photos')
             return (
