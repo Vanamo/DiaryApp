@@ -40,7 +40,7 @@ const EditNoteView = ({
           icon={{ name: 'save', type: 'font-awesome' }}
           onPress={() => save(false)}
         />
-        <View style={{ marginTop: 10 }}/>
+        <View style={{ marginTop: 10 }} />
         <Button
           title='Tallenna ja valmis '
           fontFamily='caveat-regular'
@@ -142,17 +142,31 @@ const EditNoteView = ({
               </View>
             )
           } else if (c.type === 'picture') {
-            const uri = photos.find(p => p.id === c.id).photo.node.image.uri
+            const photo = photos.find(p => p.id === c.id).photo
+            const hPerW = photo.node.image.height / photo.node.image.width
+            const uri = photo.node.image.uri
+            const photoWidth = 295
+            const photoHeight = hPerW * photoWidth
             const removeFunction = () => removeInput(c.id, 'photos')
             return (
               <View
                 key={c.id}
                 style={styles.inputContainer}
               >
-                <Image
-                  style={styles.image}
-                  source={{ uri }}
-                />
+                <View
+                  style={{
+                    width: photoWidth,
+                    height: photoHeight,
+                    marginTop: 15,
+                    borderColor: '#9e9e9e',
+                    borderWidth: 1,
+                  }}
+                >
+                  <Image
+                    style={styles.image}
+                    source={{ uri }}
+                  />
+                </View>
                 <RemoveIcon
                   onPress={() => this.askFirst('kuvan', removeFunction)}
                 />
@@ -197,47 +211,47 @@ const EditNoteView = ({
 const styles = StyleSheet.create({
   dateContainer: {
     height: 80,
+    width: '95%',
+    marginLeft: 13,
+    marginRight: 13,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   buttonContainer: {
-    marginLeft: 0,
     marginTop: 20,
     height: 70,
-    width: 320,
+    width: '90%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   inputContainer: {
+    width: '95%',
+    marginLeft: 13,
+    marginRight: 13,
+    marginTop: 15,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   textInput: {
     height: 100,
-    width: 290,
+    width: 295,
     borderColor: '#9e9e9e',
-    borderWidth: 1,
-    marginTop: 15,
-    marginLeft: 15
+    borderWidth: 1
   },
   saveButtonContainer: {
     marginTop: 30,
     marginBottom: 20,
-    width: 320
+    width: '90%'
   },
   image: {
-    height: 290,
-    width: 290,
-    marginLeft: 15,
-    marginTop: 15,
-    borderColor: '#9e9e9e',
-    borderWidth: 1,
+    height: '100%',
+    width: '100%'
   }
 })
 

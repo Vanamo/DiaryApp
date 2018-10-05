@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Dimensions,
   Image,
   Modal,
   ScrollView,
@@ -22,16 +23,28 @@ class PhotoModal extends React.Component {
             horizontal={true}
           >
             {photos.map((p, i) => {
+              const hPerW = p.node.image.height / p.node.image.width
+              const photoWidth = Dimensions.get('window').width - 54
+              const photoHeight = hPerW * photoWidth
               return (
-                <TouchableHighlight
-                  onPress={() => this.props.onPressPhoto(p)}
+                <View
                   key={i}
+                  style={{
+                    width: photoWidth,
+                    height: photoHeight,
+                    marginTop: 70,
+                    marginLeft: 20
+                  }}
                 >
-                  <Image
-                    style={styles.photoWrapper}
-                    source={{ uri: p.node.image.uri }}
-                  />
-                </TouchableHighlight>
+                  <TouchableHighlight
+                    onPress={() => this.props.onPressPhoto(p)}
+                  >
+                    <Image
+                      style={styles.photoWrapper}
+                      source={{ uri: p.node.image.uri }}
+                    />
+                  </TouchableHighlight>
+                </View>
               )
             })}
           </ScrollView>
@@ -49,10 +62,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#00000090'
   },
   photoWrapper: {
-    height: 300,
-    width: 300,
-    marginTop: 100,
-    marginLeft: 20,
+    height: '100%',
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'

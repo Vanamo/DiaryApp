@@ -10,6 +10,7 @@ import { CameraRoll } from 'react-native'
 class EditNoteScreen extends React.Component {
 
   state = {
+    id: null,
     startDate: null,
     endDate: null,
     content: [],
@@ -26,6 +27,7 @@ class EditNoteScreen extends React.Component {
     const note = this.props.navigation.state.params.note
     if (note) {
       this.setState({
+        id: note.id,
         startDate: note.startDate,
         endDate: note.endDate,
         content: note.content,
@@ -130,7 +132,7 @@ class EditNoteScreen extends React.Component {
     }
 
     const note = {
-      id: this.props.navigation.state.params.note.id,
+      id: this.state.id,
       startDate: this.state.startDate,
       endDate: this.state.endDate || this.state.startDate,
       content: this.state.content,
@@ -143,6 +145,7 @@ class EditNoteScreen extends React.Component {
     const oldEndDate = this.state.prevEndDate
 
     if (oldStartDate === note.startDate && oldEndDate === note.endDate) {
+      console.log('note to update', note)
       await this.props.updateNote(note)
       this.moveAfterDone(note, done)
       return
@@ -191,6 +194,7 @@ class EditNoteScreen extends React.Component {
       await this.props.deleteReservedDay(reservedDate)
     }
 
+    console.log('note to update', note)
     await this.props.updateNote(note)
 
     this.setState({

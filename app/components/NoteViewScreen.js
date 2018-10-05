@@ -1,6 +1,7 @@
 import React from 'react'
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import CustomButton from '../utils/CustomButton'
+import Notification from './Notification'
 
 class NoteViewScreen extends React.Component {
 
@@ -13,6 +14,7 @@ class NoteViewScreen extends React.Component {
     }
     return (
       <ScrollView>
+        <Notification />
         <View style={styles.noteBackground}>
           <Text style={styles.text}>{date}</Text>
           <View style={{ height: 10 }} />
@@ -28,13 +30,21 @@ class NoteViewScreen extends React.Component {
                 </Text>
               )
             } else if (c.type === 'picture') {
-              const uri = note.photos.find(p => p.id === c.id).photo.node.image.uri
+              const photo = note.photos.find(p => p.id === c.id).photo
+              const hPerW = photo.node.image.height / photo.node.image.width
+              const uri = photo.node.image.uri
+              const photoWidth = Dimensions.get('window').width - 54
+              const photoHeight = hPerW * photoWidth
               return (
-                <Image
-                  style={styles.image}
+                <View
                   key={c.id}
-                  source={{ uri }}
-                />
+                  style={{ height: photoHeight, width: photoWidth, marginBottom: 15 }}
+                >
+                  <Image
+                    style={styles.image}
+                    source={{ uri }}
+                  />
+                </View>
               )
             }
           })}
@@ -72,8 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     width: '100%',
-    height: 250,
-    marginBottom: 15,
+    height: '100%',
     borderColor: 'grey',
     borderWidth: 1,
   }
