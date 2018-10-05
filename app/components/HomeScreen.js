@@ -126,6 +126,15 @@ class HomeScreen extends React.Component {
             markedDates={markedDates}
             markingType={'period'}
             onDayPress={(day) => this.onDayPress(day)}
+            theme={{
+              calendarBackground: 'transparent',
+              textDayFontFamily: 'caveat-regular',
+              textMonthFontFamily: 'caveat-bold',
+              textDayHeaderFontFamily: 'caveat-regular',
+              textDayFontSize: 19,
+              textMonthFontSize: 22,
+              textDayHeaderFontSize: 19
+            }}
           />
         </View>
       </View>
