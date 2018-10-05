@@ -106,7 +106,6 @@ class HomeScreen extends React.Component {
 
   render() {
     const reservedDays = this.props.reservedDays
-    console.log('rDays', reservedDays)
     let markedDates = null
     if (!reservedDays) {
       return null

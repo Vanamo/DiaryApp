@@ -9,7 +9,7 @@ const reducer = (state = false, action) => {
 }
 
 export const showOptions = () => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: 'SHOW_OPTIONS'
     })
@@ -17,7 +17,7 @@ export const showOptions = () => {
 }
 
 export const hideOptions = () => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: 'HIDE_OPTIONS'
     })

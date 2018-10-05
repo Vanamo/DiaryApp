@@ -18,7 +18,7 @@ const reducer = (state = initialState, action) => {
 }
 
 export const newSuccessNotification = (message, time) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: 'SUCCESS',
       message,
@@ -31,7 +31,7 @@ export const newSuccessNotification = (message, time) => {
 }
 
 export const newErrorNotification = (message, time) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: 'ERROR',
       message,

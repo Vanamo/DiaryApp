@@ -38,7 +38,10 @@ const EditNoteView = ({
           borderRadius={4}
           backgroundColor='#9e9e9e'
           icon={{ name: 'save', type: 'font-awesome' }}
-          onPress={() => save(false)}
+          onPress={() => {
+            save(false)
+            this.scroller.scrollToEnd()
+          }}
         />
         <View style={{ marginTop: 10 }} />
         <Button
@@ -80,6 +83,7 @@ const EditNoteView = ({
       keyboardShouldPersistTaps='handled'
       enableOnAndroid={true}
       extraScrollHeight={100}
+      ref={(scroller) => { this.scroller = scroller }}
     >
       <View>
         <View style={styles.dateContainer}>

@@ -98,7 +98,7 @@ class NewNoteScreen extends React.Component {
     })
   }
 
-  save = async (done) => {
+  save = (done) => {
     if (!this.state.startDate) {
       this.props.newErrorNotification('Valitse alkupäivä', 5)
       return
@@ -140,17 +140,34 @@ class NewNoteScreen extends React.Component {
         startDate,
         endDate
       }
-      await this.props.newReservedDay(reservedDay)
+      this.props.newReservedDay(reservedDay)
     }
 
-    await this.props.newNote(note)
-
-    if (!done) {
-      this.props.navigation.navigate('EditNote', { note })
+    if (done) {
+      this.props.newNote(note, this.doneAfterSave)
     } else {
-      this.moveAfterDone(note)
+      this.props.newNote(note, this.notDoneAfterSave)
     }
+  }
 
+  doneAfterSave = (note) => {
+    console.log('dNote', note)
+    const index = this.props.userNotes.map(un => un.id).indexOf(note.id)
+    console.log('up', index)
+
+    this.props.setInitialTab(index)
+    this.props.navigation.navigate('NoteView')
+
+    this.resetState()
+  }
+
+  notDoneAfterSave = (note) => {
+    console.log('ndNote', note)
+    this.props.navigation.navigate('EditNote', { note })
+    this.resetState()
+  }
+
+  resetState = () => {
     this.setState({
       startDate: null,
       endDate: null,
@@ -161,15 +178,6 @@ class NewNoteScreen extends React.Component {
       choosablePhotos: null,
       modalOpen: false
     })
-  }
-
-  moveAfterDone = async (note) => {
-    const updatedNote = this.props.userNotes.find(un => un.startDate === note.startDate)
-    const index = this.props.userNotes.indexOf(updatedNote)
-    console.log('up', updatedNote, index)
-
-    await this.props.setInitialTab(index)
-    this.props.navigation.navigate('NoteView')
   }
 
   checkDates = (dateArray) => {

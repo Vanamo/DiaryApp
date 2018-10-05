@@ -36,7 +36,7 @@ export const initUserNotes = (userId) => {
   }
 }
 
-export const newNote = (noteObject) => {
+export const newNote = (noteObject, successCB) => {
   return (dispatch) => {
     dispatch({ type: 'SET_LOADER' })
     noteService.create(noteObject, function (success, data, error) {
@@ -49,6 +49,7 @@ export const newNote = (noteObject) => {
         setTimeout(() => {
           dispatch({ type: 'HIDE_NOTIFICATION' })
         }, 5000)
+        successCB(data)
       } else if (error) {
         dispatch({
           type: 'ERROR',
@@ -64,7 +65,7 @@ export const newNote = (noteObject) => {
   }
 }
 
-export const updateNote = (changedNote) => {
+export const updateNote = (changedNote, successCB) => {
   return (dispatch) => {
     dispatch({ type: 'SET_LOADER' })
     noteService.update(changedNote, function (success, data, error) {
@@ -81,6 +82,7 @@ export const updateNote = (changedNote) => {
         setTimeout(() => {
           dispatch({ type: 'HIDE_NOTIFICATION' })
         }, 5000)
+        successCB(data)
       } else if (error) {
         dispatch({
           type: 'ERROR',

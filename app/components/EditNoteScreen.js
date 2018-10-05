@@ -25,26 +25,41 @@ class EditNoteScreen extends React.Component {
 
   componentDidMount() {
     const note = this.props.navigation.state.params.note
+    console.log('note', note)
     if (note) {
+      this.setNoteState(note)
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.navigation) {
+      const newNote = this.props.navigation.state.params.note
+      console.log('nn', newNote)
+      if (this.state.id !== newNote.id) {
+        this.setNoteState(newNote)
+      }
+    }
+  }
+
+  setNoteState = (note) => {
+    this.setState({
+      id: note.id,
+      startDate: note.startDate,
+      endDate: note.endDate,
+      content: note.content,
+      showContent: true,
+      prevStartDate: note.startDate,
+      prevEndDate: note.endDate
+    })
+    if (note.textInputs) {
       this.setState({
-        id: note.id,
-        startDate: note.startDate,
-        endDate: note.endDate,
-        content: note.content,
-        showContent: true,
-        prevStartDate: note.startDate,
-        prevEndDate: note.endDate
+        textInputs: note.textInputs
       })
-      if (note.textInputs) {
-        this.setState({
-          textInputs: note.textInputs
-        })
-      }
-      if (note.photos) {
-        this.setState({
-          photos: note.photos
-        })
-      }
+    }
+    if (note.photos) {
+      this.setState({
+        photos: note.photos
+      })
     }
   }
 
@@ -125,7 +140,7 @@ class EditNoteScreen extends React.Component {
     })
   }
 
-  save = async (done) => {
+  save = (done) => {
     if (!this.state.startDate) {
       this.props.newErrorNotification('Valitse alkupäivä', 5)
       return
@@ -146,8 +161,11 @@ class EditNoteScreen extends React.Component {
 
     if (oldStartDate === note.startDate && oldEndDate === note.endDate) {
       console.log('note to update', note)
-      await this.props.updateNote(note)
-      this.moveAfterDone(note, done)
+      if (done) {
+        this.props.updateNote(note, this.doneAfterSave)
+      } else {
+        this.props.updateNote(note, this.notDoneAfterSave)
+      }
       return
     }
 
@@ -168,7 +186,6 @@ class EditNoteScreen extends React.Component {
     const reservedDays = newDays.filter((element) => {
       return oldDays.indexOf(element) === -1
     })
-    console.log('resd', reservedDays)
 
     if (this.checkDates(reservedDays)) {
       this.props.newErrorNotification('Samalle päivälle on jo muistiinpano', 5)
@@ -185,35 +202,37 @@ class EditNoteScreen extends React.Component {
         startDate,
         endDate
       }
-      await this.props.newReservedDay(reservedDay)
+      this.props.newReservedDay(reservedDay)
     }
 
     for (let i in oldDays) {
       const date = oldDays[i]
       const reservedDate = this.props.reservedDays.find(rd => rd.date === date)
-      await this.props.deleteReservedDay(reservedDate)
+      this.props.deleteReservedDay(reservedDate)
     }
 
     console.log('note to update', note)
-    await this.props.updateNote(note)
+    if (done) {
+      this.props.updateNote(note, this.doneAfterSave)
+    } else {
+      this.props.updateNote(note, this.notDoneAfterSave) 
+    }
+  }
 
+  doneAfterSave = (note) => {
+    console.log('dNote', note)
+    const index = this.props.userNotes.map(un => un.id).indexOf(note.id)
+    console.log('up', index)
+
+    this.props.setInitialTab(index)
+    this.props.navigation.navigate('NoteView')
+  }
+
+  notDoneAfterSave = (note) => {
     this.setState({
       prevStartDate: note.startDate,
       prevEndDate: note.endDate
     })
-
-    this.moveAfterDone(note, true)
-  }
-
-  moveAfterDone = async (note, done) => {
-    if (done) {
-      const updatedNote = this.props.userNotes.find(un => un.startDate === note.startDate)
-      const index = this.props.userNotes.indexOf(updatedNote)
-      console.log('up', updatedNote, index)
-
-      await this.props.setInitialTab(index)
-      this.props.navigation.navigate('NoteView')
-    }
   }
 
   checkDates = (dateArray) => {
@@ -245,6 +264,7 @@ class EditNoteScreen extends React.Component {
   }
 
   render() {
+    console.log('nav', this.props.navigation)
     return (
       <EditNoteView
         showContent={this.state.showContent}
