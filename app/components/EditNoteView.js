@@ -32,9 +32,9 @@ const EditNoteView = ({
     saveButtons = (
       <View>
         <Button
-          title='Tallenna ja jatka muokkausta '
+          title='Tallenna ja jatka muokkausta'
           fontFamily='dancing-regular'
-          fontSize={17}
+          fontSize={18}
           borderRadius={4}
           backgroundColor='#9e9e9e'
           icon={{ name: 'save', type: 'font-awesome' }}
@@ -45,9 +45,9 @@ const EditNoteView = ({
         />
         <View style={{ marginTop: 10 }} />
         <Button
-          title='Tallenna ja valmis '
+          title='Tallenna ja valmis'
           fontFamily='dancing-regular'
-          fontSize={17}
+          fontSize={18}
           borderRadius={4}
           backgroundColor='#9e9e9e'
           icon={{ name: 'save', type: 'font-awesome' }}
@@ -181,18 +181,18 @@ const EditNoteView = ({
 
         <View style={styles.buttonContainer}>
           <Button
-            title='Lisää teksti'
+            title=' Lisää teksti'
             fontFamily='dancing-regular'
-            fontSize={17}
+            fontSize={18}
             borderRadius={4}
             backgroundColor='#9e9e9e'
             icon={{ name: 'pencil', type: 'entypo' }}
             onPress={addTextInput}
           />
           <Button
-            title='Lisää kuva'
+            title=' Lisää kuva'
             fontFamily='dancing-regular'
-            fontSize={17}
+            fontSize={18}
             borderRadius={4}
             backgroundColor='#9e9e9e'
             icon={{ name: 'picture-o', type: 'font-awesome' }}
@@ -246,7 +246,8 @@ const styles = StyleSheet.create({
     height: 100,
     width: 295,
     borderColor: '#9e9e9e',
-    borderWidth: 1
+    borderWidth: 1,
+    paddingLeft: 5
   },
   saveButtonContainer: {
     marginTop: 30,

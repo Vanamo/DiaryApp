@@ -6,9 +6,10 @@ import OptionsModal from './OptionsModal'
 const LeftComponent = ({ navigation }) => {
   return (
     <Icon
-      name='open-book'
-      type='entypo'
+      name='calendar'
+      type='evilicon'
       color='white'
+      size={35}
       onPress={() => navigation.navigate('Home')}
     />
   )

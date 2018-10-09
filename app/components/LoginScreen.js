@@ -89,7 +89,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 8,
     marginLeft: 13,
-    marginRight: 13
+    marginRight: 13,
+    paddingLeft: 5
   }
 })
 

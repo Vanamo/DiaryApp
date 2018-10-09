@@ -40,12 +40,12 @@ const styles = StyleSheet.create({
   successMessage: {
     color: 'green',
     fontFamily: 'dancing-regular',
-    fontSize: 17    
+    fontSize: 18   
   },
   errorMessage: {
     color: 'red',
     fontFamily: 'dancing-regular',
-    fontSize: 17
+    fontSize: 18
   }
 })
 

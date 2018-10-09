@@ -46,7 +46,7 @@ class SignUpScreen extends React.Component {
             title2='Kirjaudu sisään tästä'
             width='wide'
           />
-          <Text style={styles.title}>Luo käyttäjätunnus</Text>
+          <Text style={styles.title}> Luo käyttäjätunnus</Text>
           <Notification />
           <TextInput
             placeholder='Käyttäjätunnus'
@@ -75,7 +75,7 @@ class SignUpScreen extends React.Component {
           />
           <View style={{ marginTop: 15 }}/>
           <CustomButton
-            title1='Luo käyttäjätunnus'
+            title1=' Luo käyttäjätunnus'
             onPress={this.handleSignUp}
           />
         </View>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginLeft: 13,
-    marginTop: 50,
+    marginTop: 40,
     fontSize: 20,
     fontFamily: 'dancing-regular'
   },
@@ -103,7 +103,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 8,
     marginLeft: 13,
-    marginRight: 13
+    marginRight: 13,
+    paddingLeft: 5
   }
 })
 

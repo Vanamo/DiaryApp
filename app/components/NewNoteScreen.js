@@ -21,6 +21,19 @@ class NewNoteScreen extends React.Component {
     modalOpen: false
   }
 
+  componentDidMount() {
+    let startDate = null
+    if (this.props.navigation.state.params) {
+      startDate = this.props.navigation.state.params.startDate
+    }
+    if (startDate) {
+      console.log('sd', startDate)
+      this.setState({
+        startDate: startDate.dateString.split('-').reverse().join('.')
+      })
+    }
+  }
+
   getId = () => {
     return Math.random().toString(36).substr(2, 16)
   }
