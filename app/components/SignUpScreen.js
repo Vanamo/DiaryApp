@@ -42,8 +42,8 @@ class SignUpScreen extends React.Component {
           />
           <CustomButton
             onPress={() => this.props.navigation.navigate('Login')}
-            title1='Onko sinulla jo käyttäjätunnus? '
-            title2='Kirjaudu sisään tästä '
+            title1='Onko sinulla jo käyttäjätunnus?'
+            title2='Kirjaudu sisään tästä'
             width='wide'
           />
           <Text style={styles.title}>Luo käyttäjätunnus</Text>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     marginLeft: 13,
     marginTop: 50,
     fontSize: 20,
-    fontFamily: 'caveat-regular'
+    fontFamily: 'dancing-regular'
   },
   textInput: {
     height: 40,

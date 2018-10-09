@@ -128,11 +128,11 @@ class HomeScreen extends React.Component {
             onDayPress={(day) => this.onDayPress(day)}
             theme={{
               calendarBackground: 'transparent',
-              textDayFontFamily: 'caveat-regular',
-              textMonthFontFamily: 'caveat-bold',
-              textDayHeaderFontFamily: 'caveat-regular',
+              textDayFontFamily: 'dancing-regular',
+              textMonthFontFamily: 'dancing-bold',
+              textDayHeaderFontFamily: 'dancing-regular',
               textDayFontSize: 19,
-              textMonthFontSize: 22,
+              textMonthFontSize: 25,
               textDayHeaderFontSize: 19
             }}
           />

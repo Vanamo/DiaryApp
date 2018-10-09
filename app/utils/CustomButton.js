@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontFamily: 'caveat-regular',
+    fontFamily: 'dancing-regular',
     fontSize: 17
   },
   textAlignment: {

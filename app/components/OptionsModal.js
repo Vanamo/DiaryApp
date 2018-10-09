@@ -128,12 +128,12 @@ const styles = StyleSheet.create({
   optionText: {
     paddingLeft: 5,
     fontSize: 17,
-    fontFamily: 'caveat-regular'
+    fontFamily: 'dancing-regular'
   },
   userText: {
     paddingLeft: 5,
     fontSize: 17,
-    fontFamily: 'caveat-bold'
+    fontFamily: 'dancing-bold'
   }
 })
 

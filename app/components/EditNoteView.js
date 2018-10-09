@@ -33,7 +33,7 @@ const EditNoteView = ({
       <View>
         <Button
           title='Tallenna ja jatka muokkausta '
-          fontFamily='caveat-regular'
+          fontFamily='dancing-regular'
           fontSize={17}
           borderRadius={4}
           backgroundColor='#9e9e9e'
@@ -46,7 +46,7 @@ const EditNoteView = ({
         <View style={{ marginTop: 10 }} />
         <Button
           title='Tallenna ja valmis '
-          fontFamily='caveat-regular'
+          fontFamily='dancing-regular'
           fontSize={17}
           borderRadius={4}
           backgroundColor='#9e9e9e'
@@ -181,8 +181,8 @@ const EditNoteView = ({
 
         <View style={styles.buttonContainer}>
           <Button
-            title='Lisää teksti '
-            fontFamily='caveat-regular'
+            title='Lisää teksti'
+            fontFamily='dancing-regular'
             fontSize={17}
             borderRadius={4}
             backgroundColor='#9e9e9e'
@@ -190,8 +190,8 @@ const EditNoteView = ({
             onPress={addTextInput}
           />
           <Button
-            title='Lisää kuva '
-            fontFamily='caveat-regular'
+            title='Lisää kuva'
+            fontFamily='dancing-regular'
             fontSize={17}
             borderRadius={4}
             backgroundColor='#9e9e9e'

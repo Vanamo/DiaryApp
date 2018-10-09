@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
   },
   successMessage: {
     color: 'green',
-    fontFamily: 'caveat-regular',
+    fontFamily: 'dancing-regular',
     fontSize: 17    
   },
   errorMessage: {
     color: 'red',
-    fontFamily: 'caveat-regular',
+    fontFamily: 'dancing-regular',
     fontSize: 17
   }
 })

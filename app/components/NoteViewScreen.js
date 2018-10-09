@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   text: {
     display: 'flex',
     alignItems: 'flex-start',
-    fontFamily: 'caveat-regular',
+    fontFamily: 'dancing-regular',
     fontSize: 20,
     marginBottom: 15
   },

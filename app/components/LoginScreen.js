@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginLeft: 13,
     marginTop: 50,
     fontSize: 20,
-    fontFamily: 'caveat-regular'
+    fontFamily: 'dancing-regular'
   },
   textInput: {
     height: 40,

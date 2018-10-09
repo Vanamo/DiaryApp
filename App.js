@@ -66,8 +66,8 @@ const RootStack = createSwitchNavigator(
 //Configure calendar
 
 LocaleConfig.locales['fi'] = {
-  monthNames: ['Tammikuu', 'Helmikuu', 'Malliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu',
-    'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'],
+  monthNames: ['Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu',
+    'Heinäkuu', 'Elokuu', 'Syyskuu', ' Lokakuu', 'Marraskuu', ' Joulukuu'],
   monthNamesShort: ['Tammi', 'Helmi', 'Maalis', 'Huhti', 'Touko', 'Kesä', 'Heinä', 'Elo',
     'Syys', 'Loka', 'Marras', 'Joulu'],
   dayNames: ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai',
@@ -85,8 +85,11 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     await Font.loadAsync({
-      'caveat-regular': require('./assets/fonts/Caveat-Regular.ttf'),
-      'caveat-bold': require('./assets/fonts/Caveat-Bold.ttf')
+      // 'caveat-regular': require('./assets/fonts/Caveat-Regular.ttf'),
+      // 'caveat-bold': require('./assets/fonts/Caveat-Bold.ttf'),
+      // 'indieFlower': require('./assets/fonts/IndieFlower.ttf'),
+      'dancing-regular': require('./assets/fonts/DancingScript-Regular.ttf'),
+      'dancing-bold': require('./assets/fonts/DancingScript-Bold.ttf')
     })
     this.setState({ fontLoaded: true })
     this.askCameraPermissions()
