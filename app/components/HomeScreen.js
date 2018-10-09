@@ -5,6 +5,7 @@ import Notification from './Notification'
 import { CalendarList } from 'react-native-calendars'
 import { setInitialTab } from '../reducers/tabReducer'
 import { Icon } from 'react-native-elements'
+import { MAX_YEARS } from '../config/constants'
 
 class HomeScreen extends React.Component {
 
@@ -109,6 +110,33 @@ class HomeScreen extends React.Component {
     return note
   }
 
+  checkBounds = (searchDate) => {
+    const date = new Date(searchDate)
+    console.log('date', date)
+    const earliestDate = new Date()
+    earliestDate.setFullYear(earliestDate.getFullYear() - MAX_YEARS)
+    earliestDate.setMonth(earliestDate.getMonth() + 1)
+    console.log('ed', earliestDate)
+    if (date < earliestDate) {
+      return earliestDate.toISOString().slice(0, 10)
+    } else {
+      return searchDate
+    }   
+  }
+
+  searchDate = () => {
+    let searchDate = null
+    if (this.state.searchDate) {
+      searchDate = this.state.searchDate.split('.').reverse().join('-')
+      searchDate = this.checkBounds(searchDate)
+    } else {
+      searchDate = new Date().toISOString().slice(0, 10)
+    }
+
+    console.log('setSD', searchDate)
+    this.setState({ currentDate: searchDate })
+  }
+
   render() {
     const reservedDays = this.props.reservedDays
     let markedDates = null
@@ -117,15 +145,7 @@ class HomeScreen extends React.Component {
     } else {
       markedDates = this.convertToDates(reservedDays)
     }
-
-    let searchDate = null
-    if (this.state.searchDate) {
-      searchDate = this.state.searchDate.split('.').reverse().join('-')
-    } else {
-      searchDate = new Date().toISOString().slice(0, 10)
-    }
-    console.log('sd', searchDate)
-    console.log('cd', this.state.currentDate)
+    const pastScrollRange = 12 * MAX_YEARS
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
         <View style={styles.messageContainer}>
@@ -137,14 +157,14 @@ class HomeScreen extends React.Component {
               style={styles.textInput}
               onChangeText={searchDate => this.setState({ searchDate })}
               value={this.state.searchDate}
+              onSubmitEditing={this.searchDate}
               underlineColorAndroid='transparent'
             />
             <Icon
               name='magnifying-glass'
               type='entypo'
-              color='white'
+              color='#9e9e9e'
               containerStyle={styles.iconContainer}
-              onPress={() => this.setState({ currentDate: searchDate })}
             /> 
           </View>
           <Notification />
@@ -158,7 +178,7 @@ class HomeScreen extends React.Component {
             markedDates={markedDates}
             markingType={'period'}
             onDayPress={(day) => this.onDayPress(day)}
-            pastScrollRange={1200}
+            pastScrollRange={pastScrollRange}
             futureScrollRange={12}
             theme={{
               calendarBackground: 'transparent',
@@ -206,17 +226,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginLeft: 13,
     paddingLeft: 5,
-    borderBottomLeftRadius: 4,
-    borderTopLeftRadius: 4
+    borderRadius: 4
   },
   iconContainer: {
-    backgroundColor: '#9e9e9e',
+    backgroundColor: 'transparent',
     marginTop: 8,
     padding: 5,
     height: 40,
-    width: 50,
-    borderBottomRightRadius: 4,
-    borderTopRightRadius: 4
+    width: 40
   }
 })
 
