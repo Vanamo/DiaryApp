@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, View }
+  from 'react-native'
 import { Icon } from 'react-native-elements'
-import notes from '../services/notes';
+import { setInitialTab } from '../reducers/tabReducer'
 
 class SearchScreen extends React.Component {
 
@@ -16,20 +17,52 @@ class SearchScreen extends React.Component {
     if (includes.length) return includes
   }
 
+  showNote = (note) => {
+    const userNote = this.props.userNotes.find(un => un.id === note.id)
+    const index = this.props.userNotes.indexOf(userNote)
+    this.props.setInitialTab(index)
+    this.props.navigation.navigate('NoteView')
+  }
+
   render() {
     const searchPhrase = this.state.searchPhrase
     let notes = []
-    if (searchPhrase.length > 2) {
-      const searchString = searchPhrase.toLowerCase()
-      const notesWithText = this.props.userNotes.filter(un => un.textInputs)
-      const filteredNotes = notesWithText.filter(un => this.includesString(searchString, un))
+    const searchString = searchPhrase.toLowerCase()
+    const notesWithText = this.props.userNotes.filter(un => un.textInputs)
+    const filteredNotes = notesWithText.filter(un => this.includesString(searchString, un))
 
+    let info = null
+    if (filteredNotes.length > 50 || !searchString) {
+      info = <Text style={styles.info}>Rajaa hakua</Text>
+    } else if (!filteredNotes.length) {
+      info = <Text style={styles.info}>Ei hakutuloksia</Text>
+    } else {
       notes = filteredNotes.map((fn) => {
         let date = fn.startDate
         if (fn.endDate !== fn.startDate) {
           date += ' - ' + fn.endDate
         }
-        const texts = fn.textInputs.filter(ti => ti.text.toLowerCase().includes(searchString))
+        let texts = fn.textInputs.filter(ti => ti.text.toLowerCase().includes(searchString))
+        texts = texts.map((t) => {
+          const firstIndex = t.text.toLowerCase().indexOf(searchString)
+          const lastIndex = firstIndex + searchString.length
+          if (t.text.length <= lastIndex + 30) {
+            if (firstIndex <= 10) {
+              return { ...t, text: t.text }
+            } else {
+              const text = t.text.substring(firstIndex - 10, t.text.length)
+              return { ...t, text: '...' + text }
+            }
+          } else {
+            if (firstIndex <= 20) {
+              const text = t.text.substring(0, lastIndex + 30)
+              return { ...t, text: text + '...' }
+            } else {
+              const text = t.text.substring(firstIndex - 10, lastIndex + 30)
+              return { ...t, text: '...' + text + '...' }
+            }
+          }
+        })
         return {
           id: fn.id,
           date,
@@ -60,17 +93,24 @@ class SearchScreen extends React.Component {
               containerStyle={styles.iconContainer}
             />
           </View>
+          {info}
           {notes.map(n => (
-            <View
+            <TouchableHighlight
               key={n.id}
+              onPress={() => this.showNote(n)}
             >
-              <Text>{n.date}</Text>
-              {n.texts.map((t, i) =>
-                <Text
-                  key={i}
-                >{t.text}</Text>
-              )}
-            </View>
+              <View
+                style={styles.noteContainer}
+              >
+                <Text style={styles.noteText}>{n.date}</Text>
+                {n.texts.map((t, i) =>
+                  <Text
+                    key={i}
+                    style={styles.noteText}
+                  >{t.text}</Text>
+                )}
+              </View>
+            </TouchableHighlight>
           ))}
         </View>
       </ScrollView>
@@ -112,15 +152,41 @@ const styles = StyleSheet.create({
     padding: 5,
     height: 40,
     width: 40
+  },
+  info: {
+    fontFamily: 'dancing-regular',
+    color: 'red',
+    fontSize: 18,
+    margin: 13
+  },
+  noteContainer: {
+    margin: 13
+  },
+  noteText: {
+    fontFamily: 'dancing-bold',
+    fontSize: 18
   }
 })
 
+const sortByStartDate = (a, b) => {
+  const d1 = new Date(a.startDate.split('.').reverse().join('-'))
+  const d2 = new Date(b.startDate.split('.').reverse().join('-'))
+  if (d1 < d2) {
+    return -1
+  } else if (d1 > d2) {
+    return 1
+  } else {
+    return 0
+  }
+}
+
 const mapStateToProps = (state) => {
   return {
-    userNotes: state.userNotes,
+    userNotes: state.userNotes.sort(sortByStartDate),
   }
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  { setInitialTab }
 )(SearchScreen)

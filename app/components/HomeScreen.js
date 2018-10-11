@@ -128,6 +128,7 @@ class HomeScreen extends React.Component {
     let searchDate = null
     if (this.state.searchDate) {
       searchDate = this.state.searchDate.split('.').reverse().join('-')
+      searchDate += '-01'
       searchDate = this.checkBounds(searchDate)
     } else {
       searchDate = new Date().toISOString().slice(0, 10)
@@ -151,7 +152,7 @@ class HomeScreen extends React.Component {
         <View style={styles.messageContainer}>
           <View style={styles.inline}>
             <TextInput
-              placeholder='pp.kk.vvvv'
+              placeholder='kk.vvvv'
               keyboardType='numeric'
               autoCapitalize='none'
               style={styles.textInput}
@@ -165,6 +166,7 @@ class HomeScreen extends React.Component {
               type='entypo'
               color='#9e9e9e'
               containerStyle={styles.iconContainer}
+              onPress={this.searchDate}
             /> 
           </View>
           <Notification />
@@ -179,7 +181,7 @@ class HomeScreen extends React.Component {
             markingType={'period'}
             onDayPress={(day) => this.onDayPress(day)}
             pastScrollRange={pastScrollRange}
-            futureScrollRange={12}
+            futureScrollRange={1}
             theme={{
               calendarBackground: 'transparent',
               textDayFontFamily: 'dancing-regular',
