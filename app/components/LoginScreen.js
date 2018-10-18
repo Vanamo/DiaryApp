@@ -45,6 +45,7 @@ class LoginScreen extends React.Component {
           <TextInput
             style={styles.textInput}
             autoCapitalize='none'
+            keyboardType='email-address'
             placeholder='Sähköpostiosoite'
             onChangeText={email => this.setState({ email })}
             value={this.state.email}

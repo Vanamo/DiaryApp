@@ -6,6 +6,7 @@ import Notification from './Notification'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Tile } from 'react-native-elements'
 import CustomButton from '../utils/CustomButton'
+import { newErrorNotification } from '../reducers/notificationReducer'
 
 class SignUpScreen extends React.Component {
 
@@ -17,12 +18,16 @@ class SignUpScreen extends React.Component {
   }
 
   handleSignUp = async () => {
-    const data = {
-      email: this.state.email,
-      password: this.state.password,
-      username: this.state.username
+    if (this.state.password === this.state.cPassword) {
+      const data = {
+        email: this.state.email,
+        password: this.state.password,
+        username: this.state.username
+      }
+      this.props.register(data, this.onSuccess)
+    } else {
+      this.props.newErrorNotification('Tarkista että kirjoitit salasanan oikein', 5)
     }
-    this.props.register(data, this.onSuccess)
   }
 
   onSuccess = () => {
@@ -50,7 +55,6 @@ class SignUpScreen extends React.Component {
           <Notification />
           <TextInput
             placeholder='Käyttäjätunnus'
-            autoCapitalize='none'
             style={styles.textInput}
             onChangeText={username => this.setState({ username })}
             value={this.state.username}
@@ -58,6 +62,7 @@ class SignUpScreen extends React.Component {
           />
           <TextInput
             placeholder='Sähköpostiosoite'
+            keyboardType='email-address'
             autoCapitalize='none'
             style={styles.textInput}
             onChangeText={email => this.setState({ email })}
@@ -73,7 +78,16 @@ class SignUpScreen extends React.Component {
             value={this.state.password}
             underlineColorAndroid='transparent'
           />
-          <View style={{ marginTop: 15 }}/>
+          <TextInput
+            secureTextEntry
+            placeholder='Salasana uudestaan'
+            autoCapitalize='none'
+            style={styles.textInput}
+            onChangeText={cPassword => this.setState({ cPassword })}
+            value={this.state.cPassword}
+            underlineColorAndroid='transparent'
+          />
+          <View style={{ marginTop: 15 }} />
           <CustomButton
             title1=' Luo käyttäjätunnus'
             onPress={this.handleSignUp}
@@ -110,5 +124,5 @@ const styles = StyleSheet.create({
 
 export default connect(
   null,
-  { register }
+  { register, newErrorNotification }
 )(SignUpScreen)
