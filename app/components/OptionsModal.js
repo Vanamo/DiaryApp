@@ -66,16 +66,6 @@ class OptionsModal extends React.Component {
               <TouchableWithoutFeedback
                 onPress={() => {
                   this.hideModal()
-                  this.props.navigation.navigate('Settings')
-                }}
-              >
-                <View style={styles.optionAbove}>
-                  <Text style={styles.optionText}>Asetukset</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  this.hideModal()
                   this.handleLogout()
                 }}
               >
@@ -101,7 +91,7 @@ const styles = StyleSheet.create({
   },
   optionsWrapper: {
     backgroundColor: '#FFFFFF',
-    height: 120,
+    height: 80,
     width: 120,
     display: 'flex',
     alignItems: 'flex-start',
