@@ -30,9 +30,11 @@ class NoteViewScreen extends React.Component {
                 </Text>
               )
             } else if (c.type === 'picture') {
-              const photo = note.photos.find(p => p.id === c.id).photo
-              const hPerW = photo.node.image.height / photo.node.image.width
-              const uri = photo.node.image.uri
+              const photoHolder = note.photos.find(p => p.id === c.id)
+              const hPerW = photoHolder.photo.node.image.height / photoHolder.photo.node.image.width
+              const deviceUri = photoHolder.photo.node.image.uri
+              const downloadURL = photoHolder.downloadURL
+              const uri = downloadURL ? downloadURL : deviceUri
               const photoWidth = Dimensions.get('window').width - 54
               const photoHeight = hPerW * photoWidth
               return (
@@ -43,6 +45,7 @@ class NoteViewScreen extends React.Component {
                   <Image
                     style={styles.image}
                     source={{ uri }}
+                    defaultSource={{ uri: deviceUri }}
                   />
                 </View>
               )

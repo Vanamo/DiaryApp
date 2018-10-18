@@ -6,6 +6,7 @@ import { newReservedDay, deleteReservedDay } from '../reducers/reservedDaysReduc
 import { setInitialTab } from '../reducers/tabReducer'
 import EditNoteView from '../components/EditNoteView'
 import { CameraRoll } from 'react-native'
+import uuid from 'uuid'
 
 class EditNoteScreen extends React.Component {
 
@@ -20,7 +21,9 @@ class EditNoteScreen extends React.Component {
     choosablePhotos: null,
     modalOpen: false,
     prevStartDate: null,
-    prevEndDate: null
+    prevEndDate: null,
+    newDays: [],
+    oldDays: []
   }
 
   componentDidMount() {
@@ -64,7 +67,7 @@ class EditNoteScreen extends React.Component {
   }
 
   getId = () => {
-    return Math.random().toString(36).substr(2, 16)
+    return uuid.v4()
   }
 
   addTextInput = () => {
@@ -187,11 +190,29 @@ class EditNoteScreen extends React.Component {
       return oldDays.indexOf(element) === -1
     })
 
+    this.setState({
+      oldDays,
+      newDays
+    })
+
     if (this.checkDates(reservedDays)) {
       this.props.newErrorNotification('Samalle päivälle on jo muistiinpano', 5)
       return
     }
 
+    console.log('note to update', note)
+    if (done) {
+      this.props.updateNote(note, this.doneAfterSave)
+    } else {
+      this.props.updateNote(note, this.notDoneAfterSave) 
+    }
+  }
+
+  saveReservedDays = (note) => {
+    const firstDate = note.startDate.split('.').reverse().join('-')
+    const lastDate = note.endDate.split('.').reverse().join('-')
+    const newDays = this.state.newDays
+    const oldDays = this.state.oldDays
     for (let i in newDays) {
       const date = newDays[i]
       const startDate = (date === firstDate)
@@ -210,13 +231,6 @@ class EditNoteScreen extends React.Component {
       const reservedDate = this.props.reservedDays.find(rd => rd.date === date)
       this.props.deleteReservedDay(reservedDate)
     }
-
-    console.log('note to update', note)
-    if (done) {
-      this.props.updateNote(note, this.doneAfterSave)
-    } else {
-      this.props.updateNote(note, this.notDoneAfterSave) 
-    }
   }
 
   doneAfterSave = (note) => {
@@ -224,11 +238,13 @@ class EditNoteScreen extends React.Component {
     const index = this.props.userNotes.map(un => un.id).indexOf(note.id)
     console.log('up', index)
 
+    this.saveReservedDays(note)
     this.props.setInitialTab(index)
     this.props.navigation.navigate('NoteView')
   }
 
   notDoneAfterSave = (note) => {
+    this.saveReservedDays(note)
     this.setState({
       prevStartDate: note.startDate,
       prevEndDate: note.endDate

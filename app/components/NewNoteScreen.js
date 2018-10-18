@@ -6,7 +6,7 @@ import { newReservedDay } from '../reducers/reservedDaysReducer'
 import { setInitialTab } from '../reducers/tabReducer'
 import EditNoteView from '../components/EditNoteView'
 import { CameraRoll } from 'react-native'
-
+import uuid from 'uuid'
 
 class NewNoteScreen extends React.Component {
 
@@ -18,7 +18,8 @@ class NewNoteScreen extends React.Component {
     textInputs: [],
     photos: [],
     choosablePhotos: null,
-    modalOpen: false
+    modalOpen: false,
+    reservedDays: []
   }
 
   componentDidMount() {
@@ -35,7 +36,7 @@ class NewNoteScreen extends React.Component {
   }
 
   getId = () => {
-    return Math.random().toString(36).substr(2, 16)
+    return uuid.v4()
   }
 
   addTextInput = () => {
@@ -137,12 +138,24 @@ class NewNoteScreen extends React.Component {
     }
 
     const reservedDays = this.getDates(firstDate, lastDate)
+    this.setState({ reservedDays })
 
     if (this.checkDates(reservedDays)) {
       this.props.newErrorNotification('Samalle päivälle on jo muistiinpano', 5)
       return
     }
 
+    if (done) {
+      this.props.newNote(note, this.doneAfterSave)
+    } else {
+      this.props.newNote(note, this.notDoneAfterSave)
+    }
+  }
+
+  saveReservedDays = (note) => {
+    const firstDate = note.startDate.split('.').reverse().join('-')
+    const lastDate = note.endDate.split('.').reverse().join('-')
+    const reservedDays = this.state.reservedDays
     for (let i in reservedDays) {
       const date = reservedDays[i]
       const startDate = (date === firstDate)
@@ -155,12 +168,6 @@ class NewNoteScreen extends React.Component {
       }
       this.props.newReservedDay(reservedDay)
     }
-
-    if (done) {
-      this.props.newNote(note, this.doneAfterSave)
-    } else {
-      this.props.newNote(note, this.notDoneAfterSave)
-    }
   }
 
   doneAfterSave = (note) => {
@@ -168,6 +175,7 @@ class NewNoteScreen extends React.Component {
     const index = this.props.userNotes.map(un => un.id).indexOf(note.id)
     console.log('up', index)
 
+    this.saveReservedDays(note)
     this.props.setInitialTab(index)
     this.props.navigation.navigate('NoteView')
 
@@ -176,6 +184,7 @@ class NewNoteScreen extends React.Component {
 
   notDoneAfterSave = (note) => {
     console.log('ndNote', note)
+    this.saveReservedDays(note)
     this.props.navigation.navigate('EditNote', { note })
     this.resetState()
   }
@@ -189,7 +198,8 @@ class NewNoteScreen extends React.Component {
       textInputs: [],
       photos: [],
       choosablePhotos: null,
-      modalOpen: false
+      modalOpen: false,
+      reservedDays: []
     })
   }
 
