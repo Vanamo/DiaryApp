@@ -32,7 +32,9 @@ class SearchScreen extends React.Component {
     const filteredNotes = notesWithText.filter(un => this.includesString(searchString, un))
 
     let info = null
-    if (filteredNotes.length > 50 || !searchString) {
+    if (!searchString) {
+      info = null
+    } else if (filteredNotes.length > 50) {
       info = <Text style={styles.info}>Rajaa hakua</Text>
     } else if (!filteredNotes.length) {
       info = <Text style={styles.info}>Ei hakutuloksia</Text>
@@ -72,7 +74,10 @@ class SearchScreen extends React.Component {
     }
 
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
+      <ScrollView
+        keyboardShouldPersistTaps='always'
+        style={{ flex: 1, backgroundColor: 'white' }}
+      >
         <View style={styles.container}>
           <Text style={styles.title}>
             Etsi muistiinpanoista
@@ -95,22 +100,24 @@ class SearchScreen extends React.Component {
           </View>
           {info}
           {notes.map(n => (
-            <TouchableHighlight
+            <View
+              style={styles.noteContainer}
               key={n.id}
-              onPress={() => this.showNote(n)}
             >
-              <View
-                style={styles.noteContainer}
+              <TouchableHighlight
+                onPress={() => this.showNote(n)}
               >
-                <Text style={styles.noteText}>{n.date}</Text>
-                {n.texts.map((t, i) =>
-                  <Text
-                    key={i}
-                    style={styles.noteText}
-                  >{t.text}</Text>
-                )}
-              </View>
-            </TouchableHighlight>
+                <View>
+                  <Text style={styles.noteText}>{n.date}</Text>
+                  {n.texts.map((t, i) =>
+                    <Text
+                      key={i}
+                      style={styles.noteText}
+                    >{t.text}</Text>
+                  )}
+                </View>
+              </TouchableHighlight>
+            </View>
           ))}
         </View>
       </ScrollView>
@@ -136,6 +143,7 @@ const styles = StyleSheet.create({
     borderColor: '#9e9e9e',
     borderWidth: 1,
     marginTop: 8,
+    marginBottom: 13,
     marginLeft: 13,
     paddingLeft: 5,
     borderRadius: 4
@@ -160,7 +168,13 @@ const styles = StyleSheet.create({
     margin: 13
   },
   noteContainer: {
-    margin: 13
+    marginLeft: 13,
+    marginBottom: 13,
+    backgroundColor: '#bfbfbf',
+    borderWidth: 1,
+    borderColor: 'grey',
+    padding: 5,
+    width: '90%'
   },
   noteText: {
     fontFamily: 'dancing-bold',
