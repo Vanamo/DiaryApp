@@ -24,7 +24,7 @@ const login = (data, callback) => {
 
 const getUser = (user, callback) => {
   db.ref('users').child(user.uid).once('value')
-    .then(function (snapshot) {
+    .then((snapshot) => {
       const exists = (snapshot.val() !== null)
       if (exists) {
         user = snapshot.val()

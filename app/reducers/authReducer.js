@@ -32,6 +32,14 @@ export const register = (userData, successCB) => {
           type: 'LOGIN',
           data
         })
+        dispatch({
+          type: 'SUCCESS',
+          message: `Tervetuloa ${userData.username}!`,
+          style: 'success'          
+        })
+        setTimeout(() => {
+          dispatch({ type: 'HIDE_NOTIFICATION' })
+        }, 5 * 1000)
         successCB()
       } else if (error) {
         dispatch({
@@ -92,7 +100,7 @@ export const setUser = (user) => {
   }
 }
 
-export const logout = (successCB, errorCB) => {
+export const logout = (successCB) => {
   return (dispatch) => {
     dispatch({ type: 'SET_LOADER' })
     authServices.logout(function (success, data, error) {
