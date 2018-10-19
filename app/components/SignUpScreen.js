@@ -43,7 +43,7 @@ class SignUpScreen extends React.Component {
         <View style={styles.formContainer}>
           <Tile
             imageSrc={require('../../images/writing-1209121_1920.jpg')}
-            containerStyle={{ height: 200 }}
+            containerStyle={{ height: 170 }}
           />
           <CustomButton
             onPress={() => this.props.navigation.navigate('Login')}
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginLeft: 13,
-    marginTop: 40,
+    marginTop: 20,
     fontSize: 20,
     fontFamily: 'dancing-regular'
   },

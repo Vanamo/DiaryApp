@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 8,
     marginLeft: 13,
-    paddingLeft: 5,
+    paddingLeft: 20,
     borderRadius: 4
   },
   iconContainer: {
