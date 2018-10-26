@@ -25,6 +25,7 @@ class NoteViewTabs extends React.Component {
       tabs,
       {
         swipeEnabled: true,
+        lazy: true,
         initialRouteName,
         navigationOptions: {
           tabBarVisible: false
